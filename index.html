@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="bower_components/paper/dist/paper-full.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/sheet.js"></script>
+    <script src="js/draw_line.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 99%;
+            height: 99%;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            border: 2px solid black;
+            background-color: lightskyblue;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        var s = new Sheet('canvas');
+        s.draw_line([0, 0], [300, 300]);
+
+        var currentLine;
+        s.on('mouseDown', function (event) {
+        });
+        s.on('mouseDrag', function (event) {
+            if (!currentLine) {
+                currentLine = s.draw_line(event.point, event.point);
+            }
+            currentLine.to = event.point;
+        });
+        s.on('mouseUp', function (event) {
+            if (!currentLine) {
+                return;
+            }
+            currentLine.on('mouseEnter', function () {
+                this.style.strokeColor = 'blue';
+            });
+            currentLine.on('mouseLeave', function () {
+                this.style.strokeColor = 'black';
+            });
+            currentLine.on('doubleClick', function () {
+                this.style.strokeColor = 'red';
+            });
+            currentLine = null;
+        });
+    </script>
+</body>
+</html>
