@@ -7,6 +7,7 @@
     <script src="js/utils.js"></script>
     <script src="js/sheet.js"></script>
     <script src="js/draw_line.js"></script>
+    <script src="js/draw_circle.js"></script>
     <style>
         html, body {
             margin: 0;
@@ -26,31 +27,33 @@
     <canvas id="canvas"></canvas>
     <script>
         var s = new Sheet('canvas');
-        s.draw_line([0, 0], [300, 300]);
+        tmp = s.draw_line([0, 0], [300, 300]);
 
-        var currentLine;
+        currentCircle = undefined;
+        var point_down;
         s.on('mouseDown', function (event) {
         });
         s.on('mouseDrag', function (event) {
-            if (!currentLine) {
-                currentLine = s.draw_line(event.point, event.point);
+            if (!currentCircle) {
+                point_down = event.point;
+                currentCircle = s.draw_circle(event.point, 100);
             }
-            currentLine.to = event.point;
+            currentCircle.fit(point_down, event.point);
         });
         s.on('mouseUp', function (event) {
-            if (!currentLine) {
+            if (!currentCircle) {
                 return;
             }
-            currentLine.on('mouseEnter', function () {
+            currentCircle.on('mouseEnter', function () {
                 this.style.strokeColor = 'blue';
             });
-            currentLine.on('mouseLeave', function () {
+            currentCircle.on('mouseLeave', function () {
                 this.style.strokeColor = 'black';
             });
-            currentLine.on('doubleClick', function () {
-                this.style.strokeColor = 'red';
+            currentCircle.on('doubleClick', function () {
+                this.style.fillColor = 'red';
             });
-            currentLine = null;
+            currentCircle = null;
         });
     </script>
 </body>

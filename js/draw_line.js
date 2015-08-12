@@ -23,18 +23,15 @@
      * @method Sheet#draw_line
      * @param {Sheet.Point} from
      * @param {Sheet.Point} to
-     * @param {Sheet.Point} style
+     * @param {Sheet.Style} style
      * @todo style should be optional
      * @returns {Sheet.Line}
      */
-    Sheet.prototype.draw_line = function (from, to, style) {
+    Sheet.extend(function draw_line(from, to, style) {
         var sheet = this;
-        sheet.__project.activate();
-        var _id = utils.id();
         var line = {
             __path: new paper.Path.Line({from: from, to: to, style: style}),
             get style() { return this.__path.style },
-            get id() { return _id; },
             get type() { return 'line'; },
             sheet: sheet,
             get from() {
@@ -54,8 +51,6 @@
                 this.trigger('change');
             }
         };
-        utils.deepExtend(line, Sheet.Entity);
-        line.init();
         return line;
-    }
+    });
 })(Sheet);

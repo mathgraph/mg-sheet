@@ -6,11 +6,12 @@
      * @property {string} strokeColor Color for brush. Defaults: 'black'
      * @property {number} strokeWidth Thickness for brush. Defaults: 5
      * @property {string} fillColor Fill color. Defaults: 'transparent'
+     * @todo Undefined color is transparent
      */
     var default_style = {
-        strokeColor: 'black',
+        strokeColor: 'red',
         strokeWidth: 5,
-        fillColor: 'transparent'
+        fillColor: undefined
     };
     var default_config = {
         //flipX: false,
@@ -72,8 +73,8 @@
 
         if (sheet.centralize) {
             sheet.__project.view.center = [0, 0];
-            sheet.__project.currentStyle = sheet.style;
         }
+        sheet.__project.currentStyle = sheet.style;
 
         sheet.__project.tool = new paper.Tool();
         sheet.__project.tool.maxDistance = 0;
@@ -89,6 +90,28 @@
 
         utils.events(sheet);
     };
+
+    /**
+     * Adding new primitive factory to Sheet
+     * @method Sheet.extend
+     * @param factory Factory for primitive object (i.g. line, circle, etc...)
+     */
+    Sheet.extend = function (factory) {
+        Sheet.prototype[factory.name] = function () {
+            this.__project.activate();
+            var entity = factory.apply(this, arguments);
+            utils.deepExtend(entity, Sheet.Entity);
+            Object.defineProperty(entity, 'id', {
+                value: utils.id(),
+                writable: false,
+                configurable: false,
+                enumerable: true
+            });
+            entity.init();
+            return entity;
+        }
+    };
+
     /**
      * Redraw sheet
      * @method Sheet#redraw
