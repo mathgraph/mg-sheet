@@ -10,12 +10,10 @@
      */
     var default_style = {
         strokeColor: 'red',
-        strokeWidth: 5,
+        strokeWidth: 2,
         fillColor: undefined
     };
     var default_config = {
-        //flipX: false,
-        //flipY: true,
         centralize: true,
         interactive: true,
         style: default_style
@@ -27,7 +25,6 @@
      * @class Sheet
      * @classdesc One sheet in album
      *
-     * @todo flipX and flipY
      * @todo cursor
      * @todo magnet
      * @todo selector
