@@ -284,10 +284,29 @@
      */
     Sheet.prototype.use = function (control, enabled) {
         var sheet = this;
-        sheet.charger[control.name] = Object.create(control);
-        sheet.charger[control.name].sheet = sheet;
-        sheet.charger[control.name].enabled = !!enabled;
-        return sheet.charger[control.name];
+        var ctrl = Object.create(control);
+        sheet.charger[control.name] = ctrl;
+        ctrl.sheet = sheet;
+        var _enabled = false;
+        Object.defineProperty(ctrl, 'enabled', {
+            get: function () {
+                return enabled
+            },
+            set: function (v) {
+                _enabled = !!v;
+                if (ctrl.mode === 'single' && _enabled) {
+                    Object.keys(sheet.charger).forEach(function (ctrlName) {
+                        if (sheet.charger[ctrlName] === 'single') {
+                            sheet.charger[ctrlName].enabled = false;
+                        }
+                    })
+                }
+            },
+            enumerable: true,
+            configurable: false
+        });
+        ctrl.enabled = !!enabled;
+        return ctrl;
     };
 
     /**
