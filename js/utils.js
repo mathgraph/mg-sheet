@@ -129,7 +129,11 @@ utils = (function () {
             return function () {
                 return count++;
             }
-        })()
+        })(),
+
+        exists: function (smth) {
+            return typeof smth !== 'undefined'
+        }
 
     }
 })();

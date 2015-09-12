@@ -9,6 +9,7 @@
     <script src="js/draw_line.js"></script>
     <script src="js/draw_circle.js"></script>
     <script src="js/draw_arrow.js"></script>
+    <script src="js/tool_selector.js"></script>
     <style>
         html, body {
             margin: 0;
@@ -27,10 +28,10 @@
 <body>
     <canvas id="canvas"></canvas>
     <script>
-        var s = new Sheet('canvas');
+        s = new Sheet('canvas');
         tmp = s.draw_line([0, 0], [300, 300]);
 
-        var current = undefined;
+        current = undefined;
         var point_down;
         s.on('mouseDown', function (event) {
         });
@@ -45,16 +46,7 @@
             if (!current) {
                 return;
             }
-            current.on('mouseEnter', function () {
-                this.style.strokeColor = 'blue';
-            });
-            current.on('mouseLeave', function () {
-                this.style.strokeColor = 'black';
-            });
-            current.on('doubleClick', function () {
-                this.style.fillColor = 'red';
-            });
-            current = null;
+//            current = null;
         });
     </script>
 </body>

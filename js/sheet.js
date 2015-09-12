@@ -20,6 +20,36 @@
     };
 
     /**
+     * All supported events for Sheet and Entity
+     * @type {string[]}
+     */
+    var eventMap = ['click', 'mouseDown', 'mouseUp', 'mouseMove', 'mouseDrag',
+        'mouseEnter', 'mouseLeave', 'doubleClick', 'keyDown', 'keyUp'];
+
+    /**
+     * Capitalize first letter. Need for compatibility with paper.js events
+     * @method Sheet~capitalizeFirst
+     * @param s
+     * @returns {string}
+     */
+    var capitalizeFirst = function (s) {
+        return s[0].toUpperCase() + s.slice(1);
+    };
+
+    var applyControls = function (eventMap, obj, charger, target) {
+        eventMap.forEach(function (name) {
+            obj.on(name, function (event) {
+                Object.keys(charger).forEach(function (ctrlName) {
+                    var ctrl = charger[ctrlName];
+                    if (ctrl.target === target && ctrl.enabled && utils.exists(ctrl[name])) {
+                        ctrl[name](obj, event);
+                    }
+                });
+            });
+        });
+    };
+
+    /**
      * Creates one sheet object on canvas
      *
      * @class Sheet
@@ -27,7 +57,6 @@
      *
      * @todo cursor
      * @todo magnet
-     * @todo selector
      *
      * @property {Element} domElem DOM element of canvas
      * @property {number} height Height of sheet
@@ -35,6 +64,7 @@
      * @property {Sheet.Entity[]} entities Objects placed on this sheet
      * @property {object} __project Paper.js project for this sheet
      * @property {object} __project.tool Paper.js tool for handling view events
+     * @property {object} charger Charger with all supported in this sheet controls
      *
      * @mixes utils.Events
      *
@@ -76,16 +106,19 @@
         sheet.__project.tool = new paper.Tool();
         sheet.__project.tool.maxDistance = 0;
 
-        sheet.__project.tool.onMouseClick = gen_listener(sheet, 'click');
-        sheet.__project.tool.onMouseDown = gen_listener(sheet, 'mouseDown');
-        sheet.__project.tool.onMouseUp = gen_listener(sheet, 'mouseUp');
-        sheet.__project.tool.onMouseMove = gen_listener(sheet, 'mouseMove');
-        sheet.__project.tool.onMouseDrag = gen_listener(sheet, 'mouseDrag');
-        sheet.__project.tool.onDoubleClick = gen_listener(sheet, 'doubleClick');
-        sheet.__project.tool.onKeyDown = gen_listener(sheet, 'keyDown');
-        sheet.__project.tool.onKeyUp = gen_listener(sheet, 'keyUp');
+        eventMap.forEach(function (name) {
+            sheet.__project.tool['on' + capitalizeFirst(name)] = gen_listener(sheet, name);
+        });
 
         utils.events(sheet);
+
+        sheet.charger = {};
+        Object.keys(Sheet.Charger).forEach(function (item, index) {
+            sheet.use(Sheet.Charger[item], true);
+        });
+
+        applyControls(eventMap, sheet, sheet.charger, 'sheet');
+
     };
 
     /**
@@ -124,6 +157,20 @@
     Sheet.prototype.remove = function (o) {
         this.entities.splice(this.indexOf(o), 1);
     };
+    /**
+     * Filter for taking entities by conditional function
+     * @param {function} condition Conditional function, should return true, if you want include entity to result array
+     * @returns {Sheet.Entity[]}
+     */
+    Sheet.prototype.filter = function (condition) {
+        var result = [];
+        this.entities.forEach(function (entity) {
+            if (condition(entity)) {
+                result.push(entity);
+            }
+        });
+        return result;
+    };
 
     /**
      * This mixin must be implemented by each object on sheet
@@ -159,22 +206,17 @@
 
             utils.events(entity);
 
-            entity.__path.onMouseClick = gen_listener(entity, 'click');
-            entity.__path.onMouseDown = gen_listener(entity, 'mouseDown');
-            entity.__path.onMouseUp = gen_listener(entity, 'mouseUp');
-            entity.__path.onMouseMove = gen_listener(entity, 'mouseMove');
-            entity.__path.onMouseDrag = gen_listener(entity, 'mouseDrag');
-            entity.__path.onMouseEnter = gen_listener(entity, 'mouseEnter');
-            entity.__path.onMouseLeave = gen_listener(entity, 'mouseLeave');
-            entity.__path.onDoubleClick = gen_listener(entity, 'doubleClick');
-            entity.__path.onKeyDown = gen_listener(entity, 'keyDown');
-            entity.__path.onKeyUp = gen_listener(entity, 'keyUp');
+            eventMap.forEach(function (name) {
+                entity.__path['on' + capitalizeFirst(name)] = gen_listener(entity, name);
+            });
+
+            applyControls(eventMap, entity, entity.sheet.charger, 'entity');
 
             entity.trigger('init');
 
+            entity.sheet.trigger('drawEntity', entity);
             entity.sheet.redraw();
 
-            entity.__initialized = true;
         },
         /**
          * Remove self from sheet
@@ -206,7 +248,46 @@
             var entity = this;
             entity.__path.show();
             entity.trigger('show');
-        }
+        },
+        __initialized: false,
+        /**
+         * Object for additional information about entity
+         */
+        markers: {}
+    };
+
+    /**
+     * Static charger. Controls from this charger auto includes in every instance chargers.
+     * @type {object}
+     */
+    Sheet.Charger = {};
+
+    /**
+     * @typedef {object} Sheet.Control
+     * @property {string} name
+     * @property {string} mode daemon
+     * @property {string} target entity or sheet
+     */
+    /**
+     * Add new control to static charger
+     * @param {Sheet.Control} desc Control description
+     */
+    Sheet.registerControl = function (desc) {
+        Sheet.Charger[desc.name] = desc;
+    };
+    /**
+     * Place control to instance charger
+     * @method Sheet.use
+     * @param control
+     * @param {boolean} [enabled]
+     * @returns {Sheet.Control}
+     */
+    Sheet.prototype.use = function (control, enabled) {
+        var sheet = this;
+        sheet.charger[control.name] = Object.create(control);
+        sheet.charger[control.name].sheet = sheet;
+        sheet.charger[control.name].enabled = !!enabled;
+        return sheet.charger[control.name];
     };
 
     /**
