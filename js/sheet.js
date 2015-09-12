@@ -149,6 +149,10 @@
         init: function () {
             var entity = this;
 
+            if (entity.__initialized) {
+                return;
+            }
+
             entity.sheet.entities.push(entity);
 
             entity.interactive = entity.sheet.interactive;
@@ -169,6 +173,8 @@
             entity.trigger('init');
 
             entity.sheet.redraw();
+
+            entity.__initialized = true;
         },
         /**
          * Remove self from sheet
