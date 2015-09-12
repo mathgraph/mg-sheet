@@ -1,4 +1,8 @@
-(function (paper) {
+define(['paper',
+    'mg-sheet/utils',
+    'mg-sheet/primitives/draw_arrow', 'mg-sheet/primitives/draw_broken', 'mg-sheet/primitives/draw_circle',
+    'mg-sheet/primitives/draw_curve', 'mg-sheet/primitives/draw_segment',
+    'mg-sheet/controls/control_selector'], function (paper, utils) {
 
     /**
      * @typedef {object} Sheet.Style
@@ -123,10 +127,10 @@
 
     /**
      * Adding new primitive factory to Sheet
-     * @method Sheet.extend
+     * @method Sheet.registerPrimitive
      * @param factory Factory for primitive object (i.g. line, circle, etc...)
      */
-    Sheet.extend = function (factory) {
+    Sheet.registerPrimitive = function (factory) {
         Sheet.prototype[factory.name] = function () {
             this.__project.activate();
             var entity = factory.apply(this, arguments);
@@ -309,6 +313,18 @@
         return ctrl;
     };
 
+    Sheet.extend = function (smth) {
+        if (smth.type === 'primitive') {
+            Sheet.registerPrimitive(smth.factory);
+        } else if (smth.type === 'control') {
+            Sheet.registerControl(smth.description);
+        }
+    };
+
+    Array.prototype.slice.call(arguments, 2).forEach(function (item, index) {
+        Sheet.extend(item);
+    });
+
     /**
      * Generate function who check if obj has an interactivity options and fires event if it has
      * @method Sheet~gen_listener
@@ -397,4 +413,5 @@
      * @event Sheet.Entity:init
      */
 
-})(paper);
+    return Sheet;
+});

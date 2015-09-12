@@ -1,4 +1,4 @@
-(function (Sheet) {
+define(['mg-sheet/utils'], function (utils) {
 
     var init = function (entity) {
         if (!utils.exists(entity.markers.highlighted)) {
@@ -25,18 +25,21 @@
         }
     };
 
-    Sheet.registerControl({
-        name: 'highlight',
-        mode: 'daemon',
-        target: 'entity',
-        mouseEnter: function (entity) {
-            init(entity);
-            entity.markers.highlighted = true;
-        },
-        mouseLeave: function (entity) {
-            init(entity);
-            entity.markers.highlighted = false;
+    return {
+        type: 'control',
+        description: {
+            name: 'highlight',
+            mode: 'daemon',
+            target: 'entity',
+            mouseEnter: function (entity) {
+                init(entity);
+                entity.markers.highlighted = true;
+            },
+            mouseLeave: function (entity) {
+                init(entity);
+                entity.markers.highlighted = false;
+            }
         }
-    });
+    };
 
-})(Sheet);
+});

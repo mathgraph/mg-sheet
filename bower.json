@@ -13,6 +13,7 @@
     "tests"
   ],
   "dependencies": {
-    "paper": "~0.9.23"
+    "paper": "~0.9.23",
+    "requirejs": "~2.1.20"
   }
 }

@@ -2,14 +2,8 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <script data-main="js/index" src="bower_components/requirejs/require.js"></script>
     <title></title>
-    <script src="bower_components/paper/dist/paper-full.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/sheet.js"></script>
-    <script src="js/draw_line.js"></script>
-    <script src="js/draw_circle.js"></script>
-    <script src="js/draw_arrow.js"></script>
-    <script src="js/tool_selector.js"></script>
     <style>
         html, body {
             margin: 0;
@@ -27,27 +21,5 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <script>
-        s = new Sheet('canvas');
-        tmp = s.draw_line([0, 0], [300, 300]);
-
-        current = undefined;
-        var point_down;
-        s.on('mouseDown', function (event) {
-        });
-        s.on('mouseDrag', function (event) {
-            if (!current) {
-                point_down = event.point;
-                current = s.draw_arrow(event.point, event.point);
-            }
-            current.to = event.point;
-        });
-        s.on('mouseUp', function (event) {
-            if (!current) {
-                return;
-            }
-//            current = null;
-        });
-    </script>
 </body>
 </html>

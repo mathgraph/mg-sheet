@@ -1,8 +1,8 @@
 /**
  * @namespace utils
  */
-utils = (function () {
-    return {
+define(function () {
+    var utils = {
         /**
          * Extend with extend object properties.
          * @example
@@ -135,5 +135,6 @@ utils = (function () {
             return typeof smth !== 'undefined'
         }
 
-    }
-})();
+    };
+    return utils;
+});
