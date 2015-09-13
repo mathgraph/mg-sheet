@@ -294,7 +294,7 @@ define(['paper',
         var _enabled = false;
         Object.defineProperty(ctrl, 'enabled', {
             get: function () {
-                return enabled
+                return _enabled
             },
             set: function (v) {
                 _enabled = !!v;
