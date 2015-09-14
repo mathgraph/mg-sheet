@@ -40,10 +40,9 @@ define(function () {
          * @param {...object} source
          */
         deepExtend: function (dest, source) {
-            for (var i = 1; i < arguments.length; i++) {
-                var s = arguments[i];
+            Array.prototype.slice.call(arguments, 1).forEach(function (s) {
                 if (typeof s !== 'object') {
-                    continue;
+                    return
                 }
                 Object.keys(s).forEach(function (key) {
                     if (typeof s[key] === 'object' && s[key] !== null) {
@@ -55,7 +54,7 @@ define(function () {
                         dest[key] = s[key];
                     }
                 })
-            }
+            });
         },
         /**
          * Add events system to obj
@@ -69,8 +68,8 @@ define(function () {
              * @mixin utils.Events
              */
 
-            var listeners = {};
-            var binders = {};
+            var listeners = {},
+                binders = {};
 
             /**
              * Fires an event
@@ -106,11 +105,12 @@ define(function () {
              * @param {function} [func] Listener should be removed. If func not specified, from event will be removed all listeners
              */
             obj.off = function (event, func) {
+                var index;
                 if (!listeners[event]) {
                     return;
                 }
                 if (typeof func === 'function') {
-                    var index = listeners[event].indexOf(func);
+                    index = listeners[event].indexOf(func);
                     listeners[event].splice(index, 1);
                     binders[event].splice(index, 1);
                 } else {

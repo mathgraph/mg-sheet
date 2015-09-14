@@ -1,4 +1,4 @@
-define(['mg-sheet/utils'], function (utils) {
+define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
 
     /**
      * @class Sheet.Segment
@@ -9,7 +9,7 @@ define(['mg-sheet/utils'], function (utils) {
      * @property {Sheet.Style} style Read-only (you can change properties of style)
      * @property {Sheet.Point} from Start of segment
      * @property {Sheet.Point} to End of segment
-     * @property {object} __path Paper.js path
+     * @property {object} $__path Paper.js path
      * @mixes Sheet.Entity
      * @fires Sheet.Segment:change
      */
@@ -32,27 +32,27 @@ define(['mg-sheet/utils'], function (utils) {
         factory: function draw_segment(from, to, style) {
             var sheet = this;
             return {
-                __path: new paper.Path.Line({from: from, to: to, style: style}),
+                $__path: new paper.Path.Line({from: from, to: to, style: style}),
                 get style() {
-                    return this.__path.style
+                    return this.$__path.style
                 },
                 get type() {
                     return 'segment';
                 },
                 sheet: sheet,
                 get from() {
-                    return this.__path.firstSegment.point;
+                    return this.$__path.firstSegment.point;
                 },
                 set from(v) {
-                    this.__path.firstSegment.point = v;
+                    this.$__path.firstSegment.point = v;
                     this.sheet.redraw();
                     this.trigger('change');
                 },
                 get to() {
-                    return this.__path.lastSegment.point;
+                    return this.$__path.lastSegment.point;
                 },
                 set to(v) {
-                    this.__path.lastSegment.point = v;
+                    this.$__path.lastSegment.point = v;
                     this.sheet.redraw();
                     this.trigger('change');
                 }

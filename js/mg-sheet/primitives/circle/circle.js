@@ -1,4 +1,4 @@
-define(['mg-sheet/utils'], function (utils) {
+define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
 
     /**
      * @class Sheet.Circle
@@ -9,7 +9,7 @@ define(['mg-sheet/utils'], function (utils) {
      * @property {Sheet.Style} style Read-only (you can change properties of style)
      * @property {Sheet.Point} center Center of circle
      * @property {Number} radius Radius of circle
-     * @property {object} __path Paper.js path
+     * @property {object} $__path Paper.js path
      * @mixes Sheet.Entity
      * @fires Sheet.Circle:change
      */
@@ -31,37 +31,38 @@ define(['mg-sheet/utils'], function (utils) {
     return {
         type: 'primitive',
         factory: function draw_circle(center, radius, style) {
-            var sheet = this;
-            var _radius = radius;
-            if (_radius < 1) {
-                _radius = 1;
-            }
-            var circle = {
-                __path: new paper.Path.Circle({center: center, radius: _radius, style: style}),
+            var sheet = this,
+                $_radius,
+                circle;
+
+            $_radius = Math.min(radius, defaultConfig.minRadius);
+
+            circle = {
+                $__path: new paper.Path.Circle({center: center, radius: $_radius, style: style}),
                 get style() {
-                    return this.__path.style
+                    return this.$__path.style
                 },
                 get type() {
                     return 'circle';
                 },
                 sheet: sheet,
                 get center() {
-                    return this.__path.position;
+                    return this.$__path.position;
                 },
                 set center(v) {
-                    this.__path.position = v;
+                    this.$__path.position = v;
                     this.sheet.redraw();
                     this.trigger('change');
                 },
                 get radius() {
-                    return _radius;
+                    return $_radius;
                 },
                 set radius(v) {
                     if (v < 1) {
                         v = 1
                     }
-                    this.__path.scale(v / _radius);
-                    _radius = v;
+                    this.$__path.scale(v / $_radius);
+                    $_radius = v;
                     this.sheet.redraw();
                     this.trigger('change');
                 },
@@ -72,8 +73,9 @@ define(['mg-sheet/utils'], function (utils) {
                  * @param {Sheet.Point} to
                  */
                 fit: function (from, to) {
-                    var f = new paper.Point(from);
-                    var t = new paper.Point(to);
+                    var f = new paper.Point(from),
+                        t = new paper.Point(to);
+
                     this.radius = f.subtract(t).length / 2;
                     this.center = new paper.Rectangle(f, t).center;
                 }

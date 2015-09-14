@@ -1,20 +1,23 @@
-define(['mg-sheet/utils'], function (utils) {
+define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
 
     var init = function (entity) {
+        var $__selected,
+            $__defaultWidth;
+
         if (!utils.exists(entity.markers.selected)) {
-            var __selected = false;
-            var __defaultWidth = null;
+            $__selected = false;
+            $__defaultWidth = null;
             Object.defineProperty(entity.markers, 'selected', {
                 get: function () {
-                    return __selected
+                    return $__selected
                 },
                 set: function (v) {
-                    __selected = !!v;
-                    if (__selected) {
-                        __defaultWidth = entity.style.strokeWidth;
+                    $__selected = !!v;
+                    if ($__selected) {
+                        $__defaultWidth = entity.style.strokeWidth;
                         entity.style.strokeWidth += 3;
                     } else {
-                        entity.style.strokeWidth = __defaultWidth;
+                        entity.style.strokeWidth = $__defaultWidth;
                     }
                 },
                 configurable: false,
@@ -30,8 +33,11 @@ define(['mg-sheet/utils'], function (utils) {
             mode: 'daemon',
             target: 'entity',
             click: function (entity) {
+                var val;
+
                 init(entity);
-                var val = entity.markers.selected;
+
+                val = entity.markers.selected;
                 entity.sheet.filter(function (e) {
                     return e.markers.selected;
                 }).forEach(function (e) {
@@ -41,7 +47,7 @@ define(['mg-sheet/utils'], function (utils) {
                 if (entity.markers.selected) {
                     entity.trigger('select');
                 } else {
-                    entity.trigger('unselect');
+                    entity.trigger('deselect');
                 }
             }
         }

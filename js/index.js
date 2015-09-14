@@ -12,17 +12,19 @@ require.config({
         {
             name: 'mg-sheet',
             location: './mg-sheet',
-            main: 'mg-sheet'
+            main: 'sheet/sheet'
         }
     ]
 });
 
 require(['mg-sheet'], function (Sheet) {
+    var s,
+        point_down;
+
     s = new Sheet('canvas');
     tmp = s.draw_segment([0, 0], [300, 300]);
 
     current = undefined;
-    var point_down;
     s.on('mouseDown', function (event) {
     });
     s.on('mouseDrag', function (event) {

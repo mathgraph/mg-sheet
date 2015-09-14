@@ -1,10 +1,4 @@
-define(['mg-sheet/utils'], function (utils) {
-
-    var config = {
-        angle: 15,
-        length: 0.1,
-        max: 20
-    };
+define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
 
     /**
      * @class Sheet.Arrow
@@ -15,7 +9,7 @@ define(['mg-sheet/utils'], function (utils) {
      * @property {Sheet.Style} style Read-only (you can change properties of style)
      * @property {Sheet.Point} from Start of arrow
      * @property {Sheet.Point} to End of arrow
-     * @property {object} __path Paper.js path
+     * @property {object} $__path Paper.js path
      * @mixes Sheet.Entity
      * @fires Sheet.Arrow:change
      */
@@ -36,48 +30,53 @@ define(['mg-sheet/utils'], function (utils) {
     return {
         type: 'primitive',
         factory: function draw_arrow(from, to, style) {
-            var sheet = this;
+            var sheet = this,
+                arrow;
 
-            var update_pens = function (arrow) {
-                var delta = arrow.to.subtract(from);
-                var pen = new paper.Point(Math.min(delta.length * config.length, config.max), 0);
-                pen.angle = delta.angle + 180 - config.angle;
-                var pen2 = pen.clone();
-                pen2.angle += 2 * config.angle;
-                arrow.__path.segments[2].point = pen.add(arrow.to);
-                arrow.__path.segments[4].point = pen2.add(arrow.to);
-            };
+            function update_pens(arrow) {
+                var delta,
+                    pen,
+                    pen2;
 
-            var arrow = {
-                __path: new paper.Path({
+                delta = arrow.to.subtract(from);
+                pen = new paper.Point(Math.min(delta.length * defaultConfig.length, defaultConfig.max), 0);
+                pen.angle = delta.angle + 180 - defaultConfig.angle;
+                pen2 = pen.clone();
+                pen2.angle += 2 * defaultConfig.angle;
+                arrow.$__path.segments[2].point = pen.add(arrow.to);
+                arrow.$__path.segments[4].point = pen2.add(arrow.to);
+            }
+
+            arrow = {
+                $__path: new paper.Path({
                         segments: [from, to, to, to, to, to],
                         closed: false,
                         style: style
                     }
                 ),
                 get style() {
-                    return this.__path.style
+                    return this.$__path.style
                 },
                 get type() {
                     return 'arrow';
                 },
                 sheet: sheet,
                 get from() {
-                    return this.__path.firstSegment.point;
+                    return this.$__path.firstSegment.point;
                 },
                 set from(v) {
-                    this.__path.firstSegment.point = v;
+                    this.$__path.firstSegment.point = v;
                     update_pens(this);
                     this.sheet.redraw();
                     this.trigger('change');
                 },
                 get to() {
-                    return this.__path.segments[1].point;
+                    return this.$__path.segments[1].point;
                 },
                 set to(v) {
-                    this.__path.segments[1].point = v;
-                    this.__path.segments[3].point = v;
-                    this.__path.segments[5].point = v;
+                    this.$__path.segments[1].point = v;
+                    this.$__path.segments[3].point = v;
+                    this.$__path.segments[5].point = v;
                     update_pens(this);
                     this.sheet.redraw();
                     this.trigger('change');
