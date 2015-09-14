@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: './js',
+    baseUrl: '../src',
     paths: {
         paper: '../bower_components/paper/dist/paper-full.min'
     },
