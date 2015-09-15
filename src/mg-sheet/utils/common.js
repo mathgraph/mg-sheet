@@ -69,7 +69,26 @@ define(function () {
              */
 
             var listeners = {},
-                binders = {};
+                binders = {},
+                silent = {};
+
+            /**
+             * Returns all used events at this moment
+             */
+            Object.defineProperty(obj, 'eventMap', {
+                get: function () {
+                    return Object.keys(listeners);
+                },
+                configurable: false,
+                enumerable: true
+            });
+
+            obj.silent = function (event) {
+                silent[event] = true;
+            };
+            obj.loud = function (event) {
+                silent[event] = false;
+            };
 
             /**
              * Fires an event
@@ -78,6 +97,9 @@ define(function () {
              * @param {object} data
              */
             obj.trigger = function (event, data) {
+                if (silent[event]) {
+                    return;
+                }
                 if (binders[event]) {
                     binders[event].forEach(function (func) {
                         func(data);
