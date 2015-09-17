@@ -125,7 +125,7 @@ define([
          */
         Sheet.registerPrimitive = function (factory) {
             Sheet.prototype[factory.name] = function () {
-                var entity;
+                var entity, func;
 
                 this.$__project.activate();
                 entity = factory.apply(this, arguments);
@@ -136,6 +136,57 @@ define([
                     configurable: false,
                     enumerable: true
                 });
+                entity.$__styles = [];
+                entity.$__styles.a = {
+                    flag: false,
+                    style: {
+                        strokeColor: "red"
+                    }
+                };
+                entity.$__styles.b = {
+                    flag: true,
+                    style: {
+                        strokeWidth: 10
+                    }
+                };
+
+                entity.applyStyle = function () {
+                    var style, i;
+                    style = JSON.parse(JSON.stringify(this.$__initialStyle));
+                    for (i in this.$__styles) {
+                        if (this.$__styles.hasOwnProperty(i)) {
+                            console.log(i);
+                            console.log(this.$__styles[i].flag);
+                            if (this.$__styles[i].flag) {
+                                utils.deepExtend(style, this.$__styles[i].style);
+                            }
+                        }
+                    }
+                    console.log(style);
+                    this.$__path.style = style;
+                };
+                entity.enableStyle = function (name) {
+                    if (this.$__styles[name] !== undefined) {
+                        this.$__styles[name].flag = true;
+                        console.log("enableStyle");
+                    }
+                    this.applyStyle();
+                };
+                entity.disableStyle = function (name) {
+                    if (this.$__styles[name] !== undefined) {
+                        this.$__styles[name].flag = false;
+                        console.log("disableStyle");
+                        console.log(this.$__styles[name]);
+                    }
+                    this.applyStyle();
+                };
+                entity.toggleStyle = function (name) {
+                    if (this.$__styles[name] !== undefined) {
+                        this.$__styles[name].flag = !this.$__styles[name].flag;
+                        console.log("toggleStyle");
+                    }
+                    this.applyStyle();
+                };
                 entity.init();
                 return entity;
             }
@@ -194,6 +245,8 @@ define([
              */
             init: function () {
                 var entity = this;
+
+                console.log(this.$__path.style)
 
                 if (entity.$__initialized) {
                     return;

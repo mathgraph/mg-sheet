@@ -35,7 +35,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 $_radius,
                 circle;
 
-            $_radius = Math.min(radius, defaultConfig.minRadius);
+            $_radius = Math.max(radius, defaultConfig.minRadius);
 
             circle = {
                 $__path: new paper.Path.Circle({center: center, radius: $_radius, style: style}),

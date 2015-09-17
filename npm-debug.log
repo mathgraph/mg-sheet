@@ -1,0 +1,259 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', 'jscs' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.37
+4 verbose node symlink /usr/bin/node
+5 verbose cache add [ 'jscs', null ]
+6 verbose cache add name=undefined spec="jscs" args=["jscs",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'jscs',
+7 verbose parsed url   path: 'jscs',
+7 verbose parsed url   href: 'jscs' }
+8 silly lockFile 86ad1086-jscs jscs
+9 verbose lock jscs /home/vmath/.npm/86ad1086-jscs.lock
+10 silly lockFile 86ad1086-jscs jscs
+11 silly lockFile 86ad1086-jscs jscs
+12 verbose addNamed [ 'jscs', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile 591c9664-jscs jscs@
+15 verbose lock jscs@ /home/vmath/.npm/591c9664-jscs.lock
+16 silly addNameRange { name: 'jscs', range: '*', hasData: false }
+17 verbose request where is /jscs
+18 verbose request registry https://registry.npmjs.org/
+19 verbose request id 445221651e6876b8
+20 verbose url raw /jscs
+21 verbose url resolving [ 'https://registry.npmjs.org/', './jscs' ]
+22 verbose url resolved https://registry.npmjs.org/jscs
+23 verbose request where is https://registry.npmjs.org/jscs
+24 info trying registry request attempt 1 at 17:29:58
+25 verbose etag "DI70EOARSI1251DNFVOBUVEPK"
+26 http GET https://registry.npmjs.org/jscs
+27 http 304 https://registry.npmjs.org/jscs
+28 silly registry.get cb [ 304,
+28 silly registry.get   { date: 'Thu, 17 Sep 2015 14:29:58 GMT',
+28 silly registry.get     via: '1.1 varnish',
+28 silly registry.get     'cache-control': 'max-age=60',
+28 silly registry.get     etag: '"DI70EOARSI1251DNFVOBUVEPK"',
+28 silly registry.get     age: '52',
+28 silly registry.get     connection: 'keep-alive',
+28 silly registry.get     'x-served-by': 'cache-fra1236-FRA',
+28 silly registry.get     'x-cache': 'HIT',
+28 silly registry.get     'x-cache-hits': '1',
+28 silly registry.get     'x-timer': 'S1442500198.596667,VS0,VE1',
+28 silly registry.get     vary: 'Accept' } ]
+29 verbose etag https://registry.npmjs.org/jscs from cache
+30 silly addNameRange number 2 { name: 'jscs', range: '*', hasData: true }
+31 silly addNameRange versions [ 'jscs',
+31 silly addNameRange   [ '0.0.1',
+31 silly addNameRange     '0.0.2',
+31 silly addNameRange     '0.0.3',
+31 silly addNameRange     '0.0.4',
+31 silly addNameRange     '0.0.5',
+31 silly addNameRange     '0.0.6',
+31 silly addNameRange     '0.0.7',
+31 silly addNameRange     '0.0.8',
+31 silly addNameRange     '0.0.9',
+31 silly addNameRange     '0.0.10',
+31 silly addNameRange     '0.0.11',
+31 silly addNameRange     '0.0.12',
+31 silly addNameRange     '1.0.0',
+31 silly addNameRange     '1.0.1',
+31 silly addNameRange     '1.0.2',
+31 silly addNameRange     '1.0.3',
+31 silly addNameRange     '1.0.4',
+31 silly addNameRange     '1.0.5',
+31 silly addNameRange     '1.0.6',
+31 silly addNameRange     '1.0.7',
+31 silly addNameRange     '1.0.8',
+31 silly addNameRange     '1.0.10',
+31 silly addNameRange     '1.0.11',
+31 silly addNameRange     '1.0.12',
+31 silly addNameRange     '1.0.13',
+31 silly addNameRange     '1.0.14',
+31 silly addNameRange     '1.0.15',
+31 silly addNameRange     '1.1.0',
+31 silly addNameRange     '1.2.0',
+31 silly addNameRange     '1.2.1',
+31 silly addNameRange     '1.2.2',
+31 silly addNameRange     '1.2.3',
+31 silly addNameRange     '1.2.4',
+31 silly addNameRange     '1.3.0',
+31 silly addNameRange     '1.4.0',
+31 silly addNameRange     '1.4.1',
+31 silly addNameRange     '1.4.2',
+31 silly addNameRange     '1.4.3',
+31 silly addNameRange     '1.4.4',
+31 silly addNameRange     '1.4.5',
+31 silly addNameRange     '1.5.1',
+31 silly addNameRange     '1.5.2',
+31 silly addNameRange     '1.5.3',
+31 silly addNameRange     '1.5.4',
+31 silly addNameRange     '1.5.6',
+31 silly addNameRange     '1.5.7',
+31 silly addNameRange     '1.5.8',
+31 silly addNameRange     '1.5.9',
+31 silly addNameRange     '1.6.0',
+31 silly addNameRange     '1.6.1',
+31 silly addNameRange     '1.6.2',
+31 silly addNameRange     '1.7.0',
+31 silly addNameRange     '1.7.1',
+31 silly addNameRange     '1.7.2',
+31 silly addNameRange     '1.7.3',
+31 silly addNameRange     '1.8.0',
+31 silly addNameRange     '1.8.1',
+31 silly addNameRange     '1.9.0',
+31 silly addNameRange     '1.10.0',
+31 silly addNameRange     '1.11.0',
+31 silly addNameRange     '1.11.1',
+31 silly addNameRange     '1.11.2',
+31 silly addNameRange     '1.11.3',
+31 silly addNameRange     '1.12.0',
+31 silly addNameRange     '1.13.0',
+31 silly addNameRange     '1.13.1',
+31 silly addNameRange     '2.0.0',
+31 silly addNameRange     '2.1.0',
+31 silly addNameRange     '2.1.1' ] ]
+32 verbose addNamed [ 'jscs', '2.1.1' ]
+33 verbose addNamed [ '2.1.1', '2.1.1' ]
+34 silly lockFile 08795e4e-jscs-2-1-1 jscs@2.1.1
+35 verbose lock jscs@2.1.1 /home/vmath/.npm/08795e4e-jscs-2-1-1.lock
+36 silly lockFile 08795e4e-jscs-2-1-1 jscs@2.1.1
+37 silly lockFile 08795e4e-jscs-2-1-1 jscs@2.1.1
+38 silly lockFile 591c9664-jscs jscs@
+39 silly lockFile 591c9664-jscs jscs@
+40 silly resolved [ { author:
+40 silly resolved      { name: 'Marat Dulin',
+40 silly resolved        email: 'mdevils@yandex.ru',
+40 silly resolved        url: 'https://github.com/jscs-dev/node-jscs/graphs/contributors' },
+40 silly resolved     description: 'JavaScript Code Style',
+40 silly resolved     name: 'jscs',
+40 silly resolved     version: '2.1.1',
+40 silly resolved     main: 'lib/checker',
+40 silly resolved     homepage: 'http://jscs.info',
+40 silly resolved     keywords:
+40 silly resolved      [ 'code style',
+40 silly resolved        'formatter',
+40 silly resolved        'lint',
+40 silly resolved        'linter',
+40 silly resolved        'style guide',
+40 silly resolved        'validate' ],
+40 silly resolved     license: 'MIT',
+40 silly resolved     repository: { type: 'git', url: 'https://github.com/jscs-dev/node-jscs' },
+40 silly resolved     bugs: { url: 'https://github.com/jscs-dev/node-jscs/issues' },
+40 silly resolved     maintainers: [ [Object], [Object], [Object], [Object] ],
+40 silly resolved     engines: { node: '>= 0.10.0' },
+40 silly resolved     dependencies:
+40 silly resolved      { 'babel-core': '^5.6.15',
+40 silly resolved        'babel-jscs': '^2.0.0',
+40 silly resolved        chalk: '~1.1.0',
+40 silly resolved        'cli-table': '~0.3.1',
+40 silly resolved        commander: '~2.8.1',
+40 silly resolved        esprima: '~2.5.0',
+40 silly resolved        estraverse: '^4.1.0',
+40 silly resolved        exit: '~0.1.2',
+40 silly resolved        glob: '^5.0.1',
+40 silly resolved        'jscs-jsdoc': '1.1.0',
+40 silly resolved        'lodash.assign': '~3.2.0',
+40 silly resolved        minimatch: '~2.0.1',
+40 silly resolved        'natural-compare': '~1.2.2',
+40 silly resolved        pathval: '~0.1.1',
+40 silly resolved        prompt: '~0.2.14',
+40 silly resolved        'reserved-words': '^0.1.1',
+40 silly resolved        resolve: '^1.1.6',
+40 silly resolved        'strip-json-comments': '~1.0.2',
+40 silly resolved        'to-double-quotes': '^1.0.0',
+40 silly resolved        'to-single-quotes': '^1.0.2',
+40 silly resolved        vow: '~0.4.8',
+40 silly resolved        'vow-fs': '~0.3.4',
+40 silly resolved        xmlbuilder: '^2.6.1' },
+40 silly resolved     devDependencies:
+40 silly resolved      { browserify: '^11.0.0',
+40 silly resolved        coveralls: '~2.11.2',
+40 silly resolved        'has-ansi': '~1.0.1',
+40 silly resolved        jshint: '~2.8.0',
+40 silly resolved        mocha: '^2.2.0',
+40 silly resolved        regenerate: '~1.2.1',
+40 silly resolved        rewire: '^2.3.1',
+40 silly resolved        sinon: '^1.13.0',
+40 silly resolved        'unicode-7.0.0': '~0.1.5',
+40 silly resolved        'unit-coverage': '^3.4.0',
+40 silly resolved        xml2js: '~0.4.4' },
+40 silly resolved     bin: { jscs: './bin/jscs' },
+40 silly resolved     'unit-coverage': { common: [Object] },
+40 silly resolved     scripts:
+40 silly resolved      { lint: 'jshint . && node bin/jscs lib test bin publish',
+40 silly resolved        test: 'npm run lint && mocha --color',
+40 silly resolved        'autofix-tests': 'node test/scripts/integration.js',
+40 silly resolved        coverage: 'unit-coverage run -p common',
+40 silly resolved        'coverage-html': 'unit-coverage run -p common -r html -o coverage.html',
+40 silly resolved        coveralls: 'unit-coverage run -p common -r lcov -o out.lcov && cat out.lcov | coveralls',
+40 silly resolved        browserify: 'browserify --standalone JscsStringChecker lib/string-checker.js -o jscs-browser.js',
+40 silly resolved        changelog: 'git log `git describe --tags --abbrev=0`..HEAD --pretty=format:\' * %s (%an)\' | grep -v \'Merge pull request\'',
+40 silly resolved        release: 'node publish/prepublish && npm test && npm publish',
+40 silly resolved        postpublish: 'node publish/postpublish',
+40 silly resolved        travis: 'npm run test && npm run autofix-tests && npm run coveralls' },
+40 silly resolved     files:
+40 silly resolved      [ 'bin',
+40 silly resolved        'lib',
+40 silly resolved        'patterns',
+40 silly resolved        'presets',
+40 silly resolved        'LICENSE',
+40 silly resolved        'jscs-browser.js' ],
+40 silly resolved     gitHead: '4a9bfa2b1ce84df5b141cbf4295e862798a7ff1e',
+40 silly resolved     _id: 'jscs@2.1.1',
+40 silly resolved     _shasum: '5c85e8d1950b3c861d18b32dd99710ed4e7c4419',
+40 silly resolved     _from: 'jscs@',
+40 silly resolved     _npmVersion: '1.4.28',
+40 silly resolved     _npmUser: { name: 'markelog', email: 'markelog@gmail.com' },
+40 silly resolved     dist:
+40 silly resolved      { shasum: '5c85e8d1950b3c861d18b32dd99710ed4e7c4419',
+40 silly resolved        tarball: 'http://registry.npmjs.org/jscs/-/jscs-2.1.1.tgz' },
+40 silly resolved     directories: {},
+40 silly resolved     _resolved: 'https://registry.npmjs.org/jscs/-/jscs-2.1.1.tgz',
+40 silly resolved     readme: 'ERROR: No README data found!' } ]
+41 info install jscs@2.1.1 into /home/vmath/npm-global/lib
+42 info installOne jscs@2.1.1
+43 verbose lib/node_modules/jscs unbuild
+44 verbose tar unpack /home/vmath/.npm/jscs/2.1.1/package.tgz
+45 silly lockFile 1eeed611-npm-global-lib-node-modules-jscs tar:///home/vmath/npm-global/lib/node_modules/jscs
+46 verbose lock tar:///home/vmath/npm-global/lib/node_modules/jscs /home/vmath/.npm/1eeed611-npm-global-lib-node-modules-jscs.lock
+47 silly lockFile 16c96a08-vmath-npm-jscs-2-1-1-package-tgz tar:///home/vmath/.npm/jscs/2.1.1/package.tgz
+48 verbose lock tar:///home/vmath/.npm/jscs/2.1.1/package.tgz /home/vmath/.npm/16c96a08-vmath-npm-jscs-2-1-1-package-tgz.lock
+49 silly gunzTarPerm modes [ '775', '664' ]
+50 error Error: EACCES, mkdir '/home/vmath/npm-global/lib/node_modules/jscs'
+50 error  { [Error: EACCES, mkdir '/home/vmath/npm-global/lib/node_modules/jscs']
+50 error   errno: 3,
+50 error   code: 'EACCES',
+50 error   path: '/home/vmath/npm-global/lib/node_modules/jscs',
+50 error   fstream_type: 'Directory',
+50 error   fstream_path: '/home/vmath/npm-global/lib/node_modules/jscs',
+50 error   fstream_class: 'DirWriter',
+50 error   fstream_stack:
+50 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+50 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+50 error      'Object.oncomplete (fs.js:108:15)' ] }
+51 error Please try running this command again as root/Administrator.
+52 error System Linux 3.5.0-54-generic
+53 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "jscs"
+54 error cwd /home/vmath/maxim/git/mg-sheet
+55 error node -v v0.10.37
+56 error npm -v 1.4.28
+57 error path /home/vmath/npm-global/lib/node_modules/jscs
+58 error fstream_path /home/vmath/npm-global/lib/node_modules/jscs
+59 error fstream_type Directory
+60 error fstream_class DirWriter
+61 error code EACCES
+62 error errno 3
+63 error stack Error: EACCES, mkdir '/home/vmath/npm-global/lib/node_modules/jscs'
+64 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+64 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+64 error fstream_stack Object.oncomplete (fs.js:108:15)
+65 verbose exit [ 3, true ]

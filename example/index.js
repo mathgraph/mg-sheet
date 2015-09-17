@@ -24,6 +24,9 @@ require(['mg-sheet'], function (Sheet) {
     s = new Sheet('canvas');
     tmp = s.draw_segment([0, 0], [300, 300]);
 
+    tmp.toggleStyle("b");
+    tmp.toggleStyle("a");
+
     current = undefined;
     s.on('mouseDown', function (event) {
     });
