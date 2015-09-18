@@ -195,56 +195,6 @@ define([
             init: function () {
                 var entity = this;
 
-                //entity.$__styles = [];
-                //entity.$__applyStyle = function () {
-                //    var style, i, oldStyle;
-                //    style = JSON.parse(JSON.stringify(this.$__initialStyle));
-                //    oldStyle = {};
-                //    for (i in this.$__styles) {
-                //        if (this.$__styles.hasOwnProperty(i)) {
-                //            if (this.$__styles[i].flag) {
-                //                utils.deepExtend(style, this.$__styles[i].style);
-                //            } else {
-                //                utils.deepExtend(oldStyle, this.$__styles[i].style);
-                //            }
-                //        }
-                //    }
-                //    for (i in oldStyle) {
-                //        if (oldStyle.hasOwnProperty(i)) {
-                //            oldStyle[i] = undefined;
-                //        }
-                //    }
-                //    utils.deepExtend(oldStyle, style);
-                //    this.$__path.style = oldStyle;
-                //    paper.view.draw();
-                //};
-                //entity.enableStyle = function (name) {
-                //    if (this.$__styles[name] !== undefined) {
-                //        this.$__styles[name].flag = true;
-                //    }
-                //    this.$__applyStyle();
-                //};
-                //entity.disableStyle = function (name) {
-                //    if (this.$__styles[name] !== undefined) {
-                //        this.$__styles[name].flag = false;
-                //    }
-                //    this.$__applyStyle();
-                //};
-                //entity.toggleStyle = function (name) {
-                //    if (this.$__styles[name] !== undefined) {
-                //        this.$__styles[name].flag = !this.$__styles[name].flag;
-                //    }
-                //    this.$__applyStyle();
-                //};
-                //entity.pushStyle = function (name, style) {
-                //    this.$__styles[name] = {
-                //        flag: true,
-                //        style: style
-                //    };
-                //    this.$__applyStyle();
-                //};
-
-
                 if (entity.$__initialized) {
                     return;
                 }
@@ -306,15 +256,13 @@ define([
             $__styles : [],
             $__applyStyle: function () {
                 var style, i, oldStyle;
-                style = clone(this.$__initialStyle);
+                style = utils.clone(this.$__initialStyle);
                 oldStyle = {};
                 for (i in this.$__styles) {
-                    if (this.$__styles.hasOwnProperty(i)) {
-                        if (this.$__styles[i].flag) {
-                            utils.deepExtend(style, this.$__styles[i].style);
-                        } else {
-                            utils.deepExtend(oldStyle, this.$__styles[i].style);
-                        }
+                    if (this.$__styles[i].flag) {
+                        utils.deepExtend(style, this.$__styles[i].style);
+                    } else {
+                        utils.deepExtend(oldStyle, this.$__styles[i].style);
                     }
                 }
                 for (i in oldStyle) {
@@ -324,22 +272,22 @@ define([
                 }
                 utils.deepExtend(oldStyle, style);
                 this.$__path.style = oldStyle;
-                paper.view.draw();
+                this.sheet.draw();
             },
             enableStyle: function (name) {
-                if (this.$__styles[name] !== undefined) {
+                if (typeof this.$__styles[name] !== "undefined") {
                     this.$__styles[name].flag = true;
                 }
                 this.$__applyStyle();
             },
             disableStyle: function (name) {
-                if (this.$__styles[name] !== undefined) {
+                if (typeof this.$__styles[name] !== "undefined") {
                     this.$__styles[name].flag = false;
                 }
                 this.$__applyStyle();
             },
             toggleStyle: function (name) {
-                if (this.$__styles[name] !== undefined) {
+                if (typeof this.$__styles[name] !== "undefined") {
                     this.$__styles[name].flag = !this.$__styles[name].flag;
                 }
                 this.$__applyStyle();
