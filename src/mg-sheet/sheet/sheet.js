@@ -272,7 +272,7 @@ define([
                 }
                 utils.deepExtend(oldStyle, style);
                 this.$__path.style = oldStyle;
-                this.sheet.draw();
+                this.sheet.redraw();
             },
             enableStyle: function (name) {
                 if (typeof this.$__styles[name] !== "undefined") {
