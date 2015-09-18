@@ -30,9 +30,12 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
     return {
         type: 'primitive',
         factory: function draw_segment(from, to, style) {
-            var sheet = this;
+            var sheet = this,
+                initialStyle = clone(defaultConfig.style || {});
+            utils.deepExtend(initialStyle, style);
             return {
-                $__path: new paper.Path.Line({from: from, to: to, style: style}),
+                $__initialStyle: initialStyle,
+                $__path: new paper.Path.Line({from: from, to: to, style: initialStyle}),
                 get style() {
                     return this.$__path.style
                 },

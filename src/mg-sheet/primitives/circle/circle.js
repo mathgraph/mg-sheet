@@ -33,12 +33,17 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         factory: function draw_circle(center, radius, style) {
             var sheet = this,
                 $_radius,
-                circle;
+                circle,
+                initialStyle
+                ;
+            initialStyle = clone(defaultConfig.style || {});
+            utils.deepExtend(initialStyle, style);
 
-            $_radius = Math.min(radius, defaultConfig.minRadius);
+            $_radius = Math.max(radius, defaultConfig.minRadius);
 
             circle = {
-                $__path: new paper.Path.Circle({center: center, radius: $_radius, style: style}),
+                $__initialStyle: initialStyle,
+                $__path: new paper.Path.Circle({center: center, radius: $_radius, style: initialStyle}),
                 get style() {
                     return this.$__path.style
                 },

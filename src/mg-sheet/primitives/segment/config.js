@@ -1,3 +1,7 @@
 define(function () {
-    return {}
+    return {
+        style: {
+            strokeColor: "yellow"
+        }
+    }
 });
