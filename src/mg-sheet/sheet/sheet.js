@@ -252,7 +252,53 @@ define([
             /**
              * Object for additional information about entity
              */
-            markers: {}
+            markers: {},
+            $__styles : [],
+            $__applyStyle: function () {
+                var style, i, oldStyle;
+                style = utils.clone(this.$__initialStyle);
+                oldStyle = {};
+                for (i in this.$__styles) {
+                    if (this.$__styles[i].flag) {
+                        utils.deepExtend(style, this.$__styles[i].style);
+                    } else {
+                        utils.deepExtend(oldStyle, this.$__styles[i].style);
+                    }
+                }
+                for (i in oldStyle) {
+                    if (oldStyle.hasOwnProperty(i)) {
+                        oldStyle[i] = undefined;
+                    }
+                }
+                utils.deepExtend(oldStyle, style);
+                this.$__path.style = oldStyle;
+                this.sheet.draw();
+            },
+            enableStyle: function (name) {
+                if (typeof this.$__styles[name] !== "undefined") {
+                    this.$__styles[name].flag = true;
+                }
+                this.$__applyStyle();
+            },
+            disableStyle: function (name) {
+                if (typeof this.$__styles[name] !== "undefined") {
+                    this.$__styles[name].flag = false;
+                }
+                this.$__applyStyle();
+            },
+            toggleStyle: function (name) {
+                if (typeof this.$__styles[name] !== "undefined") {
+                    this.$__styles[name].flag = !this.$__styles[name].flag;
+                }
+                this.$__applyStyle();
+            },
+            pushStyle: function (name, style) {
+                this.$__styles[name] = {
+                    flag: true,
+                    style: style
+                };
+                this.$__applyStyle();
+            }
         };
 
         /**
