@@ -33,7 +33,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             var sheet = this,
                 arrow,
                 initialStyle;
-            initialStyle = JSON.parse(JSON.stringify(defaultConfig.style || {}));
+            initialStyle = clone(defaultConfig.style || {});
             utils.deepExtend(initialStyle, style);
 
             function update_pens(arrow) {

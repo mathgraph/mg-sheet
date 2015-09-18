@@ -31,7 +31,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         type: 'primitive',
         factory: function draw_segment(from, to, style) {
             var sheet = this,
-                initialStyle = JSON.parse(JSON.stringify(defaultConfig.style || {}));
+                initialStyle = clone(defaultConfig.style || {});
             utils.deepExtend(initialStyle, style);
             return {
                 $__initialStyle: initialStyle,

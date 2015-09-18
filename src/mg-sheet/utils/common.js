@@ -155,6 +155,9 @@ define(function () {
 
         exists: function (smth) {
             return typeof smth !== 'undefined'
+        },
+        clone: function (obg) {
+            return JSON.parse(JSON.stringify(obg));
         }
 
     };

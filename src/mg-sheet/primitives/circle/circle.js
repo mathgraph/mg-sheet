@@ -36,7 +36,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 circle,
                 initialStyle
                 ;
-            initialStyle = JSON.parse(JSON.stringify(defaultConfig.style || {}));
+            initialStyle = clone(defaultConfig.style || {});
             utils.deepExtend(initialStyle, style);
 
             $_radius = Math.max(radius, defaultConfig.minRadius);
