@@ -136,57 +136,6 @@ define([
                     configurable: false,
                     enumerable: true
                 });
-                entity.$__styles = [];
-                entity.$__styles.a = {
-                    flag: false,
-                    style: {
-                        strokeColor: "red"
-                    }
-                };
-                entity.$__styles.b = {
-                    flag: true,
-                    style: {
-                        strokeWidth: 10
-                    }
-                };
-
-                entity.applyStyle = function () {
-                    var style, i;
-                    style = JSON.parse(JSON.stringify(this.$__initialStyle));
-                    for (i in this.$__styles) {
-                        if (this.$__styles.hasOwnProperty(i)) {
-                            console.log(i);
-                            console.log(this.$__styles[i].flag);
-                            if (this.$__styles[i].flag) {
-                                utils.deepExtend(style, this.$__styles[i].style);
-                            }
-                        }
-                    }
-                    console.log(style);
-                    this.$__path.style = style;
-                };
-                entity.enableStyle = function (name) {
-                    if (this.$__styles[name] !== undefined) {
-                        this.$__styles[name].flag = true;
-                        console.log("enableStyle");
-                    }
-                    this.applyStyle();
-                };
-                entity.disableStyle = function (name) {
-                    if (this.$__styles[name] !== undefined) {
-                        this.$__styles[name].flag = false;
-                        console.log("disableStyle");
-                        console.log(this.$__styles[name]);
-                    }
-                    this.applyStyle();
-                };
-                entity.toggleStyle = function (name) {
-                    if (this.$__styles[name] !== undefined) {
-                        this.$__styles[name].flag = !this.$__styles[name].flag;
-                        console.log("toggleStyle");
-                    }
-                    this.applyStyle();
-                };
                 entity.init();
                 return entity;
             }
@@ -246,7 +195,57 @@ define([
             init: function () {
                 var entity = this;
 
-                console.log(this.$__path.style)
+                entity.$__styles = [];
+                entity.$__applyStyle = function () {
+                    var style, i, oldStyle;
+                    style = JSON.parse(JSON.stringify(this.$__initialStyle));
+                    oldStyle = {};
+                    for (i in this.$__styles) {
+                        if (this.$__styles.hasOwnProperty(i)) {
+                            if (this.$__styles[i].flag) {
+                                utils.deepExtend(style, this.$__styles[i].style);
+                            } else {
+                                utils.deepExtend(oldStyle, this.$__styles[i].style);
+                            }
+                        }
+                    }
+                    for (i in oldStyle) {
+                        if (oldStyle.hasOwnProperty(i)) {
+                            oldStyle[i] = undefined;
+                        }
+                    }
+                    utils.deepExtend(oldStyle, style);
+                    console.log(oldStyle);
+                    this.$__path.style = oldStyle;
+                    console.log(this.$__path.style)
+                    paper.view.draw();
+                };
+                entity.enableStyle = function (name) {
+                    if (this.$__styles[name] !== undefined) {
+                        this.$__styles[name].flag = true;
+                    }
+                    this.$__applyStyle();
+                };
+                entity.disableStyle = function (name) {
+                    if (this.$__styles[name] !== undefined) {
+                        this.$__styles[name].flag = false;
+                    }
+                    this.$__applyStyle();
+                };
+                entity.toggleStyle = function (name) {
+                    if (this.$__styles[name] !== undefined) {
+                        this.$__styles[name].flag = !this.$__styles[name].flag;
+                    }
+                    this.$__applyStyle();
+                };
+                entity.pushStyle = function (name, style) {
+                    this.$__styles[name] = {
+                        flag: true,
+                        style: style
+                    }
+                    this.$__applyStyle();
+                }
+
 
                 if (entity.$__initialized) {
                     return;
