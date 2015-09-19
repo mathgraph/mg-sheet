@@ -26,6 +26,8 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     }
                 }
             });
+
+            entity.pushStyle('highlighted', defaultConfig.style);
         }
     };
 
@@ -38,10 +40,12 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             mouseEnter: function (entity) {
                 init(entity);
                 entity.markers.highlighted = true;
+                entity.enableStyle('highlighted');
             },
             mouseLeave: function (entity) {
                 init(entity);
                 entity.markers.highlighted = false;
+                entity.disableStyle('highlighted');
             }
         }
     };

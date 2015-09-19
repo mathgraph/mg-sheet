@@ -43,7 +43,7 @@ require(['mg-sheet'], function (Sheet) {
     s.on('mouseDrag', function (event) {
         if (!current) {
             point_down = event.point;
-            current = s.draw_arrow(event.point, event.point);
+            current = s.draw_segment(event.point, event.point);
         }
         current.to = event.point;
     });

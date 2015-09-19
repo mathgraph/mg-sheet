@@ -23,6 +23,8 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 configurable: false,
                 enumerable: true
             });
+
+            entity.pushStyle('selected', defaultConfig.style);
         }
     };
 
@@ -47,10 +49,13 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 if (entity.markers.selected) {
                     entity.trigger('select');
                     entity.sheet.trigger('select', entity);
+                    entity.enableStyle('selected');
                 } else {
                     entity.trigger('deselect');
                     entity.sheet.trigger('deselect', entity);
+                    entity.disableStyle('selected');
                 }
+
             }
         }
     };

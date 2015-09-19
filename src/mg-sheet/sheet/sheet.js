@@ -3,7 +3,7 @@ define([
         'mg-sheet/utils/common',
         'mg-sheet/primitives/arrow/arrow', 'mg-sheet/primitives/broken/broken', 'mg-sheet/primitives/circle/circle',
         'mg-sheet/primitives/curve/curve', 'mg-sheet/primitives/segment/segment',
-        'mg-sheet/controls/selector/selector'],
+        'mg-sheet/controls/selector/selector', 'mg-sheet/controls/highlighter/highlighter'],
     function (paper, defaultConfig, utils) {
 
         /**
