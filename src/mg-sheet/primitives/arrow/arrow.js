@@ -66,7 +66,27 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 },
                 sheet: sheet,
                 get from() {
-                    return this.$__path.firstSegment.point;
+                    var self = this;
+                    return {
+                        get x() {
+                            return self.$__path.firstSegment.point.x;
+                        },
+                        set x(v) {
+                            self.$__path.firstSegment.point.x = v;
+                            update_pens(self);
+                            self.sheet.redraw();
+                            self.trigger('change');
+                        },
+                        get y() {
+                            return self.$__path.firstSegment.point.y;
+                        },
+                        set y(v) {
+                            self.$__path.firstSegment.point.y = v;
+                            update_pens(self);
+                            self.sheet.redraw();
+                            self.trigger('change');
+                        }
+                    }
                 },
                 set from(v) {
                     this.$__path.firstSegment.point = v;
@@ -75,7 +95,31 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     this.trigger('change');
                 },
                 get to() {
-                    return this.$__path.segments[1].point;
+                    var self = this;
+                    return {
+                        get x() {
+                            return self.$__path.segments[1].point.x;
+                        },
+                        set x(v) {
+                            self.$__path.segments[1].point.x = v;
+                            self.$__path.segments[3].point.x = v;
+                            self.$__path.segments[5].point.x = v;
+                            update_pens(self);
+                            self.sheet.redraw();
+                            self.trigger('change');
+                        },
+                        get y() {
+                            return self.$__path.segments[1].point.y;
+                        },
+                        set y(v) {
+                            self.$__path.segments[1].point.y = v;
+                            self.$__path.segments[3].point.y = v;
+                            self.$__path.segments[5].point.y = v;
+                            update_pens(self);
+                            self.sheet.redraw();
+                            self.trigger('change');
+                        }
+                    }
                 },
                 set to(v) {
                     this.$__path.segments[1].point = v;
