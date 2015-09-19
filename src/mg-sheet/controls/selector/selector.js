@@ -46,8 +46,10 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 entity.markers.selected = !val;
                 if (entity.markers.selected) {
                     entity.trigger('select');
+                    entity.sheet.trigger('select', entity);
                 } else {
                     entity.trigger('deselect');
+                    entity.sheet.trigger('deselect', entity);
                 }
             }
         }
