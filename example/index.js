@@ -22,7 +22,7 @@ require(['mg-sheet'], function (Sheet) {
         point_down;
 
     s = new Sheet('canvas');
-    tmp = s.draw_segment([0, 0], [300, 300]);
+    tmp = s.draw_arrow([0, 0], [300, 300]);
     ////test style
     //tmp = s.draw_circle([0, 0], 300, {fillColor: "black"});
     //tmp.pushStyle("a", {
@@ -43,7 +43,7 @@ require(['mg-sheet'], function (Sheet) {
     s.on('mouseDrag', function (event) {
         if (!current) {
             point_down = event.point;
-            current = s.draw_segment(event.point, event.point);
+            current = s.draw_arrow(event.point, event.point);
         }
         current.to = event.point;
     });

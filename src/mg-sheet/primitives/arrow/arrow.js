@@ -37,17 +37,19 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             utils.deepExtend(initialStyle, style);
 
             function update_pens(arrow) {
-                var delta,
+                var to = new paper.Point(arrow.to),
+                    from = new paper.Point(arrow.from),
+                    delta,
                     pen,
                     pen2;
 
-                delta = arrow.to.subtract(from);
+                delta = to.subtract(from);
                 pen = new paper.Point(Math.min(delta.length * defaultConfig.length, defaultConfig.max), 0);
                 pen.angle = delta.angle + 180 - defaultConfig.angle;
                 pen2 = pen.clone();
                 pen2.angle += 2 * defaultConfig.angle;
-                arrow.$__path.segments[2].point = pen.add(arrow.to);
-                arrow.$__path.segments[4].point = pen2.add(arrow.to);
+                arrow.$__path.segments[2].point = pen.add(to);
+                arrow.$__path.segments[4].point = pen2.add(to);
             }
 
             arrow = {
@@ -130,6 +132,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     this.trigger('change');
                 }
             };
+            update_pens(arrow);
             return arrow;
         }
     };
