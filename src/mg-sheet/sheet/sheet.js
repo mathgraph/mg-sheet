@@ -305,6 +305,11 @@ define([
                     priority: priority
                 };
                 this.$__applyStyle();
+            },
+            set: function (name, val) {
+                var entity = this;
+                entity[name] = val;
+                return entity;
             }
         };
 
