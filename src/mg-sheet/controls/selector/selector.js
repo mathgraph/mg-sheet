@@ -44,6 +44,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     return e.markers.selected;
                 }).forEach(function (e) {
                     e.markers.selected = false;
+                    e.disableStyle('selected');
                 });
                 entity.markers.selected = !val;
                 if (entity.markers.selected) {
