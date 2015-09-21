@@ -37,6 +37,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 initialStyle
                 ;
             initialStyle = utils.clone(defaultConfig.style || {});
+            utils.deepExtend(initialStyle, sheet.style);
             utils.deepExtend(initialStyle, style);
 
             $_radius = Math.max(radius, defaultConfig.minRadius);

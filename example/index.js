@@ -23,19 +23,20 @@ require(['mg-sheet'], function (Sheet) {
 
     s = new Sheet('canvas');
     tmp = s.draw_arrow([0, 0], [300, 300]);
-    ////test style
-    //tmp = s.draw_circle([0, 0], 300, {fillColor: "black"});
-    //tmp.pushStyle("a", {
-    //    strokeColor: "red"
-    //});
-    //tmp.pushStyle("b", {
-    //    strokeWidth: 10,
-    //    strokeColor: "blue"
-    //});
-    //tmp.toggleStyle("b");
-    //tmp.enableStyle("a");
-    //tmp.disableStyle("a");
-    ////end test
+    tmp = s.draw_segment([0, 0], [300, -300]);
+    //test style
+    tmp = s.draw_circle([0, 0], 300/*, {fillColor: "black"}*/);
+    /*tmp.pushStyle("a", {
+        strokeColor: "red"
+    });
+    tmp.pushStyle("b", {
+        strokeWidth: 10,
+        strokeColor: "blue"
+    });
+    tmp.toggleStyle("b");
+    tmp.enableStyle("a");
+    tmp.disableStyle("a");*/
+    //end test
 
     current = undefined;
     s.on('mouseDown', function (event) {

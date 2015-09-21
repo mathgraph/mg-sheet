@@ -34,6 +34,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 arrow,
                 initialStyle;
             initialStyle = utils.clone(defaultConfig.style || {});
+            utils.deepExtend(initialStyle, sheet.style);
             utils.deepExtend(initialStyle, style);
 
             function update_pens(arrow) {

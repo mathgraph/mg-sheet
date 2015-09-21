@@ -1,6 +1,6 @@
 define({
     style: {
-        width: 5,
+        strokeWidth: 5,
         strokeColor: 'red'
     }
 });

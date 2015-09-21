@@ -32,6 +32,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         factory: function draw_segment(from, to, style) {
             var sheet = this,
                 initialStyle = utils.clone(defaultConfig.style || {});
+            utils.deepExtend(initialStyle, sheet.style);
             utils.deepExtend(initialStyle, style);
             return {
                 $__initialStyle: initialStyle,

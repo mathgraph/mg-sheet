@@ -254,15 +254,20 @@ define([
              */
             markers: {},
             $__styles : [],
+            $__amountStyles: 0,
             $__applyStyle: function () {
-                var style, i, oldStyle;
+                var style, i, oldStyle, sortStyles;
                 style = utils.clone(this.$__initialStyle);
                 oldStyle = {};
+                sortStyles = new Array(this.$__amountStyles);
                 for (i in this.$__styles) {
-                    if (this.$__styles[i].flag) {
-                        utils.deepExtend(style, this.$__styles[i].style);
+                    sortStyles[this.$__styles[i].priority] = this.$__styles[i];
+                }
+                for (i = 0; i < sortStyles.length; i++) {
+                    if (sortStyles[i].flag) {
+                        utils.deepExtend(style, sortStyles[i].style);
                     } else {
-                        utils.deepExtend(oldStyle, this.$__styles[i].style);
+                        utils.deepExtend(oldStyle, sortStyles[i].style);
                     }
                 }
                 for (i in oldStyle) {
@@ -293,9 +298,11 @@ define([
                 this.$__applyStyle();
             },
             pushStyle: function (name, style) {
+                var priority = this.$__amountStyles++;
                 this.$__styles[name] = {
                     flag: true,
-                    style: style
+                    style: style,
+                    priority: priority
                 };
                 this.$__applyStyle();
             }
