@@ -21,7 +21,8 @@ define([
          */
         var eventMap = ['click', 'mouseDown', 'mouseUp', 'mouseMove', 'mouseDrag',
                 'mouseEnter', 'mouseLeave', 'doubleClick', 'keyDown', 'keyUp'],
-            Sheet;
+            Sheet, cursor;
+
 
         /**
          * Capitalize first letter. Need for compatibility with paper.js events
@@ -116,6 +117,26 @@ define([
 
             applyControls(eventMap, sheet, sheet.charger, 'sheet');
 
+
+            //cursor
+            document.getElementById("canvas").style.cursor = "none";
+            cursor = new paper.Path({
+                    segments: [new paper.Point(-5, 0), new paper.Point(5, 0), new paper.Point(0, 0), new paper.Point(0, -5), new paper.Point(0, 5)],
+                    closed: false,
+                    style: {
+                        strokeColor: 'black',
+                        strokeWidth: 2,
+                        fillColor: undefined
+                    },
+                    guide: true
+                }
+            );
+            cursor.listener = function (event) {
+                cursor.position = event.point;
+            }
+            paper.tool.maxDistance = 1;
+            sheet.on('mouseMove', cursor.listener);
+            sheet.on('mouseDrag', cursor.listener);
         };
 
         /**
@@ -138,7 +159,8 @@ define([
                 });
                 entity.init();
                 return entity;
-            }
+            };
+            return this;
         };
 
         /**
@@ -147,6 +169,7 @@ define([
          */
         Sheet.prototype.redraw = function () {
             this.$__project.view.draw();
+            return this;
         };
         /**
          * Remove object from sheet
@@ -155,6 +178,7 @@ define([
          */
         Sheet.prototype.remove = function (o) {
             this.entities.splice(this.indexOf(o), 1);
+            return this;
         };
         /**
          * Filter for taking entities by conditional function
@@ -216,6 +240,8 @@ define([
                 entity.sheet.trigger('drawEntity', entity);
                 entity.sheet.redraw();
 
+                cursor.bringToFront();
+                return entity;
             },
             /**
              * Remove self from sheet
@@ -227,6 +253,7 @@ define([
                 entity.$__path.remove();
                 sheet.entities.remove(entity);
                 entity.trigger('remove');
+                return entity;
             },
             /**
              * Hide self
@@ -237,6 +264,7 @@ define([
                 var entities = this;
                 entities.$__path.hide();
                 entities.trigger('hide');
+                return entities;
             },
             /**
              * Show self
@@ -247,21 +275,23 @@ define([
                 var entity = this;
                 entity.$__path.show();
                 entity.trigger('show');
+                return entity;
             },
             $__initialized: false,
             /**
              * Object for additional information about entity
              */
             markers: {},
-            $__styles : [],
+            $__styles: [],
             $__amountStyles: 0,
             $__applyStyle: function () {
-                var style, i, oldStyle, sortStyles;
-                style = utils.clone(this.$__initialStyle);
+                var entity, style, i, oldStyle, sortStyles;
+                entity = this;
+                style = utils.clone(entity.$__initialStyle);
                 oldStyle = {};
-                sortStyles = new Array(this.$__amountStyles);
-                for (i in this.$__styles) {
-                    sortStyles[this.$__styles[i].priority] = this.$__styles[i];
+                sortStyles = new Array(entity.$__amountStyles);
+                for (i in entity.$__styles) {
+                    sortStyles[entity.$__styles[i].priority] = entity.$__styles[i];
                 }
                 for (i = 0; i < sortStyles.length; i++) {
                     if (sortStyles[i].flag) {
@@ -276,35 +306,45 @@ define([
                     }
                 }
                 utils.deepExtend(oldStyle, style);
-                this.$__path.style = oldStyle;
-                this.sheet.redraw();
+                entity.$__path.style = oldStyle;
+                entity.sheet.redraw();
+                return entity;
             },
             enableStyle: function (name) {
-                if (typeof this.$__styles[name] !== "undefined") {
-                    this.$__styles[name].flag = true;
+                var entity = this;
+                if (typeof entity.$__styles[name] !== "undefined") {
+                    entity.$__styles[name].flag = true;
                 }
-                this.$__applyStyle();
+                entity.$__applyStyle();
+                return entity;
             },
             disableStyle: function (name) {
+                var entity = this;
                 if (typeof this.$__styles[name] !== "undefined") {
                     this.$__styles[name].flag = false;
                 }
                 this.$__applyStyle();
+                return entity;
             },
             toggleStyle: function (name) {
+                var entity = this;
                 if (typeof this.$__styles[name] !== "undefined") {
                     this.$__styles[name].flag = !this.$__styles[name].flag;
                 }
                 this.$__applyStyle();
+                return entity;
             },
             pushStyle: function (name, style) {
-                var priority = this.$__amountStyles++;
-                this.$__styles[name] = {
+                var entity, priority;
+                entity = this;
+                priority = entity.$__amountStyles++;
+                entity.$__styles[name] = {
                     flag: true,
                     style: style,
                     priority: priority
                 };
-                this.$__applyStyle();
+                entity.$__applyStyle();
+                entity.$__applyStyle();
             },
             set: function (name, val) {
                 var entity = this;
@@ -331,6 +371,7 @@ define([
          */
         Sheet.registerControl = function (desc) {
             Sheet.Charger[desc.name] = desc;
+            return this;
         };
         /**
          * Place control to instance charger
@@ -373,6 +414,7 @@ define([
             } else if (smth.type === 'control') {
                 Sheet.registerControl(smth.description);
             }
+            return this;
         };
 
         Array.prototype.slice.call(arguments, 3).forEach(function (item, index) {
