@@ -6,7 +6,6 @@ define(function () {
             strokeColor: 'red',
             strokeWidth: 2,
             fillColor: undefined
-        },
-        customCursor: true
+        }
     }
 });
