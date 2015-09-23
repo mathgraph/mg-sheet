@@ -117,28 +117,26 @@ define([
 
             applyControls(eventMap, sheet, sheet.charger, 'sheet');
 
-            if (defaultConfig.customCursor) {
-                document.getElementById("canvas").style.cursor = "none";
 
-
-                cursor = new paper.Path({
-                        segments: [new paper.Point(-5, 0), new paper.Point(5, 0), new paper.Point(0, 0), new paper.Point(0, -5), new paper.Point(0, 5)],
-                        closed: false,
-                        style: {
-                            strokeColor: 'black',
-                            strokeWidth: 2,
-                            fillColor: undefined
-                        }
-                    }
-                );
-
-                cursor.guide = true
-
-                paper.tool.maxDistance = 10;
-                sheet.on("mouseMove", function (event) {
-                    cursor.position = event.point;
-                });
+            //cursor
+            document.getElementById("canvas").style.cursor = "none";
+            cursor = new paper.Path({
+                    segments: [new paper.Point(-5, 0), new paper.Point(5, 0), new paper.Point(0, 0), new paper.Point(0, -5), new paper.Point(0, 5)],
+                    closed: false,
+                    style: {
+                        strokeColor: 'black',
+                        strokeWidth: 2,
+                        fillColor: undefined
+                    },
+                    guide: true
+                }
+            );
+            cursor.listener = function (event) {
+                cursor.position = event.point;
             }
+            paper.tool.maxDistance = 1;
+            sheet.on('mouseMove', cursor.listener);
+            sheet.on('mouseDrag', cursor.listener);
         };
 
         /**
@@ -239,9 +237,7 @@ define([
                 entity.sheet.trigger('drawEntity', entity);
                 entity.sheet.redraw();
 
-                if (defaultConfig.customCursor) {
-                    cursor.bringToFront();
-                }
+                cursor.bringToFront();
             },
             /**
              * Remove self from sheet
