@@ -344,6 +344,11 @@ define([
                     priority: priority
                 };
                 entity.$__applyStyle();
+                entity.$__applyStyle();
+            },
+            set: function (name, val) {
+                var entity = this;
+                entity[name] = val;
                 return entity;
             }
         };
