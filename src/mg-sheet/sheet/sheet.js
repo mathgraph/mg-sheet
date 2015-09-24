@@ -147,6 +147,7 @@ define([
          */
         Sheet.prototype.redraw = function () {
             this.$__project.view.draw();
+            return this;
         };
         /**
          * Remove object from sheet
@@ -155,6 +156,7 @@ define([
          */
         Sheet.prototype.remove = function (o) {
             this.entities.splice(this.indexOf(o), 1);
+            return this;
         };
         /**
          * Filter for taking entities by conditional function
@@ -215,7 +217,7 @@ define([
 
                 entity.sheet.trigger('drawEntity', entity);
                 entity.sheet.redraw();
-
+                return entity;
             },
             /**
              * Remove self from sheet
@@ -227,6 +229,7 @@ define([
                 entity.$__path.remove();
                 sheet.entities.remove(entity);
                 entity.trigger('remove');
+                return entity;
             },
             /**
              * Hide self
@@ -237,6 +240,7 @@ define([
                 var entities = this;
                 entities.$__path.hide();
                 entities.trigger('hide');
+                return entities;
             },
             /**
              * Show self
@@ -247,6 +251,7 @@ define([
                 var entity = this;
                 entity.$__path.show();
                 entity.trigger('show');
+                return entity;
             },
             $__initialized: false,
             /**
@@ -256,12 +261,13 @@ define([
             $__styles : [],
             $__amountStyles: 0,
             $__applyStyle: function () {
-                var style, i, oldStyle, sortStyles;
-                style = utils.clone(this.$__initialStyle);
+                var entity, style, i, oldStyle, sortStyles;
+                entity = this;
+                style = utils.clone(entity.$__initialStyle);
                 oldStyle = {};
-                sortStyles = new Array(this.$__amountStyles);
+                sortStyles = new Array(entity.$__amountStyles);
                 for (i in this.$__styles) {
-                    sortStyles[this.$__styles[i].priority] = this.$__styles[i];
+                    sortStyles[entity.$__styles[i].priority] = entity.$__styles[i];
                 }
                 for (i = 0; i < sortStyles.length; i++) {
                     if (sortStyles[i].flag) {
@@ -276,35 +282,44 @@ define([
                     }
                 }
                 utils.deepExtend(oldStyle, style);
-                this.$__path.style = oldStyle;
-                this.sheet.redraw();
+                entity.$__path.style = oldStyle;
+                entity.sheet.redraw();
+                return entity;
             },
             enableStyle: function (name) {
+                var entity = this;
                 if (typeof this.$__styles[name] !== "undefined") {
                     this.$__styles[name].flag = true;
                 }
                 this.$__applyStyle();
+                return entity;
             },
             disableStyle: function (name) {
+                var entity = this;
                 if (typeof this.$__styles[name] !== "undefined") {
-                    this.$__styles[name].flag = false;
+                    entity.$__styles[name].flag = false;
                 }
                 this.$__applyStyle();
+                return entity;
             },
             toggleStyle: function (name) {
+                var entity = this;
                 if (typeof this.$__styles[name] !== "undefined") {
-                    this.$__styles[name].flag = !this.$__styles[name].flag;
+                    entity.$__styles[name].flag = !entity.$__styles[name].flag;
                 }
-                this.$__applyStyle();
+                entity.$__applyStyle();
+                return entity;
             },
             pushStyle: function (name, style) {
-                var priority = this.$__amountStyles++;
+                var entity, priority = this.$__amountStyles++;
+                entity = this;
                 this.$__styles[name] = {
                     flag: true,
                     style: style,
                     priority: priority
                 };
-                this.$__applyStyle();
+                entity.$__applyStyle();
+                return entity;
             },
             set: function (name, val) {
                 var entity = this;
@@ -368,11 +383,13 @@ define([
         };
 
         Sheet.extend = function (smth) {
+            var sheet = this;
             if (smth.type === 'primitive') {
                 Sheet.registerPrimitive(smth.factory);
             } else if (smth.type === 'control') {
                 Sheet.registerControl(smth.description);
             }
+            return sheet;
         };
 
         Array.prototype.slice.call(arguments, 3).forEach(function (item, index) {
