@@ -3,7 +3,8 @@ define([
         'mg-sheet/utils/common',
         'mg-sheet/primitives/arrow/arrow', 'mg-sheet/primitives/broken/broken', 'mg-sheet/primitives/circle/circle',
         'mg-sheet/primitives/curve/curve', 'mg-sheet/primitives/segment/segment',
-        'mg-sheet/controls/selector/selector', 'mg-sheet/controls/highlighter/highlighter'],
+        'mg-sheet/controls/selector/selector', 'mg-sheet/controls/highlighter/highlighter',
+        'mg-sheet/extensions/ticker/ticker'],
     function (paper, defaultConfig, utils) {
 
         /**
@@ -116,6 +117,11 @@ define([
 
             applyControls(eventMap, sheet, sheet.charger, 'sheet');
 
+            sheet.extensions = {};
+            Object.keys(Sheet.Extensions).forEach(function (key) {
+                sheet.extension(Sheet.Extensions[key]);
+            });
+
         };
 
         /**
@@ -198,6 +204,10 @@ define([
                 if (entity.$__initialized) {
                     return;
                 }
+                Object.keys(entity.sheet.extensions).forEach(function (key) {
+                    entity.sheet.extensions[key].preInit &&
+                    entity.sheet.extensions[key].preInit(entity);
+                });
 
                 entity.sheet.entities.push(entity);
 
@@ -213,6 +223,11 @@ define([
 
                 entity.trigger('init');
 
+                Object.keys(entity.sheet.extensions).forEach(function (key) {
+                    entity.sheet.extensions[key].postInit &&
+                    entity.sheet.extensions[key].postInit(entity);
+                });
+
                 entity.sheet.trigger('drawEntity', entity);
                 entity.sheet.redraw();
 
@@ -224,6 +239,10 @@ define([
              */
             remove: function () {
                 var entity = this;
+                Object.keys(entity.sheet.extensions).forEach(function (key) {
+                    entity.sheet.extensions[key].preRemove &&
+                    entity.sheet.extensions[key].preRemove(entity);
+                });
                 entity.$__path.remove();
                 sheet.entities.remove(entity);
                 entity.trigger('remove');
@@ -367,11 +386,28 @@ define([
             return ctrl;
         };
 
+        Sheet.Extension = {
+            preInit: function (entity) {},
+            postInit: function (entity) {},
+            preRemove: function (entity) {}
+        };
+        Sheet.Extensions = {};
+        Sheet.addExtension = function (desc) {
+            Sheet.Extensions[desc.name] = desc;
+        };
+        Sheet.prototype.extension = function (desc) {
+            var sheet = this;
+            sheet.extensions[desc.name] = desc;
+            return sheet;
+        };
+
         Sheet.extend = function (smth) {
             if (smth.type === 'primitive') {
                 Sheet.registerPrimitive(smth.factory);
             } else if (smth.type === 'control') {
                 Sheet.registerControl(smth.description);
+            } else if (smth.type === 'extension') {
+                Sheet.addExtension(smth.description)
             }
         };
 
