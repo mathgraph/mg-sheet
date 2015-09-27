@@ -31,10 +31,10 @@ require(['mg-sheet'], function (Sheet) {
     s.on('mouseDrag', function (event) {
         if (!current) {
             point_down = event.point;
-            current = s.draw_arrow(event.point, event.point).ticker();
+            current = s.draw_circle(event.point).ticker();
             current.markers.selected = true;
         }
-        current.to = event.point;
+        current.fit(point_down, event.point);
     });
     s.on('mouseUp', function (event) {
         if (!current) {

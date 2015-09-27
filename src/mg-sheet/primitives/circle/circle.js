@@ -35,7 +35,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 $_radius,
                 circle;
 
-            $_radius = Math.max(radius, defaultConfig.minRadius);
+            $_radius = Math.max(+radius || defaultConfig.minRadius, defaultConfig.minRadius);
 
             circle = {
                 defaultStyle: defaultConfig.style,
