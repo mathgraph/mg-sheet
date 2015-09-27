@@ -4,7 +4,6 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         var $__highlighted,
             $__defaultWidth,
             $__defaultColor;
-
         if (!utils.exists(entity.markers.highlighted)) {
             $__highlighted = false;
             $__defaultWidth = null;
@@ -32,21 +31,19 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
     };
 
     return {
+        name: 'highlight',
         type: 'control',
-        description: {
-            name: 'highlight',
-            mode: 'daemon',
-            target: 'entity',
-            mouseEnter: function (entity) {
-                init(entity);
-                entity.markers.highlighted = true;
-                entity.enableStyle('highlighted');
-            },
-            mouseLeave: function (entity) {
-                init(entity);
-                entity.markers.highlighted = false;
-                entity.disableStyle('highlighted');
-            }
+        mode: 'daemon',
+        target: 'entity',
+        mouseEnter: function (entity) {
+            init(entity);
+            entity.markers.highlighted = true;
+            entity.enableStyle('highlighted');
+        },
+        mouseLeave: function (entity) {
+            init(entity);
+            entity.markers.highlighted = false;
+            entity.disableStyle('highlighted');
         }
     };
 

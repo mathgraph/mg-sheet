@@ -31,11 +31,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         type: 'primitive',
         factory: function draw_arrow(from, to, style) {
             var sheet = this,
-                arrow,
-                initialStyle;
-            initialStyle = utils.clone(defaultConfig.style || {});
-            utils.deepExtend(initialStyle, sheet.style);
-            utils.deepExtend(initialStyle, style);
+                arrow;
 
             function update_pens(arrow) {
                 var to = new paper.Point(arrow.to),
@@ -54,11 +50,11 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             }
 
             arrow = {
-                $__initialStyle: initialStyle,
+                defaultStyle: defaultConfig.style,
+                initialStyle: style,
                 $__path: new paper.Path({
                         segments: [from, to, to, to, to, to],
-                        closed: false,
-                        style: initialStyle
+                        closed: false
                     }
                 ),
                 get style() {
