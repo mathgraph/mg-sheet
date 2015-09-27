@@ -42,6 +42,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
 
                 delta = to.subtract(from);
                 pen = new paper.Point(Math.min(delta.length * defaultConfig.length, defaultConfig.max), 0);
+                arrow.$__path.$__penLength = pen.length;
                 pen.angle = delta.angle + 180 - defaultConfig.angle;
                 pen2 = pen.clone();
                 pen2.angle += 2 * defaultConfig.angle;
@@ -132,7 +133,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             update_pens(arrow);
             Object.defineProperty(arrow.$__path, 'length', {
                 get() {
-                    return this.segments[1].point.subtract(this.segments[0].point).length;
+                    return this.segments[1].point.subtract(this.segments[0].point).length - this.$__penLength;
                 },
                 configurable: true,
                 enumerable: true

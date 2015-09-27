@@ -56,15 +56,13 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
     }
 
     return {
-        type: 'extension',
-        description: {
-            name: 'ticker',
-            postInit: function (entity) {
-                entity.ticker = function (config) {
-                    drawTicks(entity, config)
-                        .on('change', drawTicks.bind(entity));
-                    return entity;
-                }
+        type: 'decorator',
+        name: 'ticker',
+        decorate: function (entity) {
+            entity.ticker = function (config) {
+                drawTicks(entity, config)
+                    .on('change', drawTicks.bind(entity));
+                return entity;
             }
         }
     }
