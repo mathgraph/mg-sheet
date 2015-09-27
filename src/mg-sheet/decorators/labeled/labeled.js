@@ -1,16 +1,14 @@
-define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
+define(['lodash', './config'], function (_, defaultConfig) {
 
     function makeLabel(config, content) {
         return new paper.PointText(config.text);
     }
 
-    function drawLabels(entity, config) {
+    function drawLabels(entity, content, config) {
         var path, pathLength,
-            labels, start, step, cur, label, offset,
-            count = 0;
-        entity = entity || this;
+            labels, start, step, count = 0;
         config = config || {};
-        utils.deepExtend(config, defaultConfig);
+        _.defaultsDeep(config, defaultConfig);
 
         entity.$__labels = entity.$__labels || new paper.Group();
         labels = entity.$__labels;
@@ -23,36 +21,22 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         start = pathLength * config.start;
         step = config.step.unit === '%' ? pathLength * config.step.length : +config.step.length;
 
-        if (config.direction.indexOf('>') !== -1) {
-            cur = start;
-            while (cur <= pathLength) {
+        _([start])
+            .concat(_.contains(config.direction, '>') ? _.range(start + step, pathLength, step) : [])
+            .concat(_.contains(config.direction, '<') ? _.range(start - step, 0, -step) : [])
+            .each(function (offset) {
+                var normal, label;
                 label = makeLabel(config);
-                label.content = count++;
-                //label.rotate(path.getNormalAt(cur).angle + 90|| 0);
-                offset = path.getNormalAt(cur);
-                offset.length = config.length;
-                //label.translate(path.getPointAt(cur).add(offset));
-                label.position = path.getPointAt(cur);
-                label.translate(offset);
+                label.content = content(offset.toFixed(config.toFixed));
+                normal = path.getNormalAt(offset);
+                normal.length = config.length;
+                label.position = path.getPointAt(offset);
+                label.rotate(config.angle || 0);
+                label.translate(normal);
                 labels.addChild(label);
-                cur += step;
-            }
-        }
+            })
+            .value();
 
-        if (config.direction.indexOf('<') !== -1) {
-            cur = start;
-            while (cur >= 0) {
-                label = makeLabel(config);
-                label.content = count++;
-                offset = path.getNormalAt(cur);
-                offset.length = config.length;
-                //label.translate(path.getPointAt(cur).add(offset));
-                label.position = path.getPointAt(cur);
-                label.translate(offset);
-                labels.addChild(label);
-                cur -= step;
-            }
-        }
         entity.sheet.redraw();
         return entity;
     }
@@ -61,9 +45,10 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         type: 'decorator',
         name: 'labeled',
         decorate: function (entity) {
-            entity.labeled = function (config) {
-                drawLabels(entity, config)
-                    .on('change', drawLabels.bind(entity));
+            entity.labeled = function (content, config) {
+                content = content || _.identity;
+                drawLabels(entity, content, config)
+                    .on('change', drawLabels.bind(null, entity, content, config));
                 return entity;
             }
         }
