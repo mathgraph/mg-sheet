@@ -10,6 +10,6 @@ define({
         unit: ''
     },
     direction: '<>',
-    angle: 45,
+    angle: 0,
     toFixed: 2
 });
