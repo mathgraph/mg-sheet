@@ -37,10 +37,10 @@ define(['lodash', '../utils/common'], function (_, utils) {
                     utils.events(entity);
                     entity.sheet.entities.push(entity);
                     entity.$__path && (entity.$__path.$__entity = entity);
+                    entity.markers = {};
                     initials.forEach(function (fn) {
                         fn.call(entity);
                     });
-                    entity.markers = {};
                     entity.sheet.redraw();
                     return entity;
                 },

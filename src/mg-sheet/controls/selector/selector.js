@@ -14,7 +14,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                         return;
                     }
                     $__selected = !!v;
-                    $__selected ? entity.enableStyle('selected') : entity.disableStyle('selected');
+                    entity.switchStyle('selected', $__selected);
                     entity.trigger($__selected ? 'select' : 'deselect');
                     entity.sheet.trigger($__selected ? 'select' : 'deselect', entity);
                     $__selected && entity.sheet.entities.forEach(function (e) {
@@ -25,7 +25,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 enumerable: true
             });
 
-            entity.pushStyle('selected', defaultConfig.style);
+            entity.pushStyle('selected', defaultConfig.style, false, 100);
         }
     };
 
@@ -34,8 +34,8 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         type: 'control',
         mode: 'daemon',
         target: 'entity',
+        init: init,
         click: function (entity) {
-            init(entity);
             entity.markers.selected = !entity.markers.selected;
         }
     };

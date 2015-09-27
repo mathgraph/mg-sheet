@@ -25,19 +25,6 @@ require(['mg-sheet'], function (Sheet) {
     s = new Sheet('canvas');
     tmp = s.draw_arrow([0, 0], [300, 300]);
     tmp = s.draw_segment([0, 0], [300, -300]);
-    //test style
-    //tmp = s.draw_circle([0, 0], 300/*, {fillColor: "black"}*/).ticker();
-    /*tmp.pushStyle("a", {
-        strokeColor: "red"
-    });
-    tmp.pushStyle("b", {
-        strokeWidth: 10,
-        strokeColor: "blue"
-    });
-    tmp.toggleStyle("b");
-    tmp.enableStyle("a");
-    tmp.disableStyle("a");*/
-    //end test
     current = undefined;
     s.on('mouseDown', function (event) {
     });
@@ -45,6 +32,7 @@ require(['mg-sheet'], function (Sheet) {
         if (!current) {
             point_down = event.point;
             current = s.draw_arrow(event.point, event.point);
+            current.markers.selected = true;
         }
         current.to = event.point;
     });

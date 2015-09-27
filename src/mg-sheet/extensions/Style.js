@@ -13,8 +13,8 @@ define(['lodash', 'mg-sheet/extensions/Entity'], function (_, Entity) {
 
                 cascade = _(entity.$__styles)
                     .filter('flag')
-                    .pluck('style')
                     .sortBy('priority')
+                    .pluck('style')
                     .value();
 
                 style = _.merge.apply(null, [{}].concat(cascade));
@@ -40,11 +40,16 @@ define(['lodash', 'mg-sheet/extensions/Entity'], function (_, Entity) {
                 entity.applyStyle();
                 return entity;
             },
-            pushStyle: function (name, style) {
-                var entity = this,
-                    priority = entity.$__amountStyles++;
+            switchStyle: function (name, flag) {
+                var entity = this;
+                flag ? entity.enableStyle(name) : entity.disableStyle(name);
+                return entity;
+            },
+            pushStyle: function (name, style, flag, priority) {
+                var entity = this;
+                priority = priority || entity.$__amountStyles++;
                 entity.$__styles[name] = {
-                    flag: true,
+                    flag: !!flag,
                     style: style || {},
                     priority: priority
                 };
@@ -58,12 +63,9 @@ define(['lodash', 'mg-sheet/extensions/Entity'], function (_, Entity) {
         });
 
         entity
-            .pushStyle('default', entity.defaultStyle)
-            .enableStyle('default')
-            .pushStyle('sheet', entity.sheet.style)
-            .enableStyle('sheet')
-            .pushStyle('initial', entity.initialStyle)
-            .enableStyle('initial')
+            .pushStyle('default', entity.defaultStyle, true)
+            .pushStyle('sheet', entity.sheet.style, true)
+            .pushStyle('initial', entity.initialStyle, true)
     });
 
     return {

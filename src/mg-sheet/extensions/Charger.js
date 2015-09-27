@@ -3,10 +3,29 @@ define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor'], f
     var Charger = {};
 
     Entity.initial(function () {
-        var entity = this;
+        var entity = this,
+            charger = _(entity.sheet.charger);
+
+        charger
+            .filter({ target: 'entity' })
+            .pluck('init')
+            .filter(_.isFunction)
+            .each(function (fn) {
+                fn(entity);
+            })
+            .value();
+
+        charger
+            .filter({ target: entity.type })
+            .pluck('init')
+            .filter(_.isFunction)
+            .each(function (fn) {
+                fn(entity);
+            })
+            .value();
+
         entity.sheet.eventMap.forEach(function (eventName){
             entity.on(eventName, function (event) {
-                var charger = _(entity.sheet.charger);
                 charger
                     .filter({ enabled: true, target: 'entity' })
                     .pluck(eventName)
@@ -18,6 +37,7 @@ define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor'], f
                 charger
                     .filter({ enabled: true, target: entity.type })
                     .pluck(eventName)
+                    .filter(_.isFunction)
                     .each(function (fn) {
                         fn(entity);
                     })
