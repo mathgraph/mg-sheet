@@ -6,7 +6,7 @@ define([
         'mg-sheet/primitives/arrow/arrow', 'mg-sheet/primitives/broken/broken', 'mg-sheet/primitives/circle/circle',
         'mg-sheet/primitives/curve/curve', 'mg-sheet/primitives/segment/segment',
         'mg-sheet/controls/selector/selector', 'mg-sheet/controls/highlighter/highlighter',
-        'mg-sheet/decorators/ticker/ticker', 'mg-sheet/decorators/labeled/labeled'],
+        'mg-sheet/decorators/ticker/ticker', 'mg-sheet/decorators/labeled/labeled', 'mg-sheet/decorators/grid/grid'],
     function (Sheet) {
         Array.prototype.slice.call(arguments, 1).forEach(function (item) {
             Sheet.module(item);
