@@ -31,12 +31,12 @@ require(['mg-sheet'], function (Sheet) {
     s.on('mouseDrag', function (event) {
         if (!current) {
             point_down = event.point;
-            //current = s.draw_circle(event.point).grid().ticker();
-            current = s.draw_arrow(event.point, event.point).ticker().labeled().grid();
+            current = s.draw_circle(event.point).grid().ticker();
+            //current = s.draw_arrow(event.point, event.point).ticker().labeled().grid();
             current.markers.selected = true;
         }
-        //current.fit(point_down, event.point);
-        current.to = event.point;
+        current.fit(point_down, event.point);
+        //current.to = event.point;
     });
     s.on('mouseUp', function (event) {
         if (!current) {

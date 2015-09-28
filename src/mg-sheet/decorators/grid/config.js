@@ -1,5 +1,5 @@
 define({
-    type: 'circles',
+    type: 'lines',
     style: {
         strokeWidth: 1,
         strokeColor: '#AAAAAAAA',
@@ -11,6 +11,6 @@ define({
         unit: ''
     },
     direction: '<>',
-    angle: 0,
+    angle: 90,
     toFixed: 2
 });

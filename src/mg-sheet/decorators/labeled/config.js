@@ -15,5 +15,6 @@ define({
         fontFamily: 'Courier New',
         fontSize: 15
     },
+    toFixed: 2,
     angle: 0
 });
