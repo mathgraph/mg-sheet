@@ -133,7 +133,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             update_pens(arrow);
             Object.defineProperty(arrow.$__path, 'length', {
                 get() {
-                    return this.segments[1].point.subtract(this.segments[0].point).length - this.$__penLength;
+                    return this.segments[1].point.subtract(this.segments[0].point).length;
                 },
                 configurable: true,
                 enumerable: true
