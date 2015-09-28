@@ -4,8 +4,7 @@ define(function () {
         interactive: true,
         style: {
             strokeColor: 'red',
-            strokeWidth: 2,
-            fillColor: undefined
+            strokeWidth: 2
         }
     }
 });

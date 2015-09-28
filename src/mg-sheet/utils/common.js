@@ -1,7 +1,7 @@
 /**
  * @namespace utils
  */
-define(function () {
+define(['lodash'], function (_) {
     var utils = {
         /**
          * Extend with extend object properties.
@@ -79,6 +79,14 @@ define(function () {
                 get: function () {
                     return Object.keys(listeners);
                 },
+                set: function (events) {
+                    events.forEach(function (event) {
+                        if (!listeners[event]) {
+                            listeners[event] = [];
+                            binders[event] = [];
+                        }
+                    })
+                },
                 configurable: false,
                 enumerable: true
             });
@@ -100,11 +108,11 @@ define(function () {
                 if (silent[event]) {
                     return;
                 }
-                if (binders[event]) {
-                    binders[event].forEach(function (func) {
-                        func(data);
-                    });
-                }
+                binders[event] && _.takeWhile(binders[event], function (func) {
+                    var result = func(data);
+                    _.isUndefined(result) && (result = true);
+                    return result;
+                });
             };
             /**
              * Add listener on event

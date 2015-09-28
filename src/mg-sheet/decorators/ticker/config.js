@@ -9,5 +9,7 @@ define({
         length: 50,
         unit: ''
     },
-    direction: '<>'
+    direction: '<>',
+    angle: 0,
+    toFixed: 2
 });

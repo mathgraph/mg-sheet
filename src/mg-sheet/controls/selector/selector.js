@@ -1,63 +1,42 @@
 define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
 
     var init = function (entity) {
-        var $__selected,
-            $__defaultWidth;
+        var $__selected;
 
         if (!utils.exists(entity.markers.selected)) {
             $__selected = false;
-            $__defaultWidth = null;
             Object.defineProperty(entity.markers, 'selected', {
                 get: function () {
                     return $__selected
                 },
                 set: function (v) {
-                    $__selected = !!v;
-                    if ($__selected) {
-                        $__defaultWidth = entity.style.strokeWidth;
-                        entity.style.strokeWidth += 3;
-                    } else {
-                        entity.style.strokeWidth = $__defaultWidth;
+                    if (!!v === $__selected) {
+                        return;
                     }
+                    $__selected = !!v;
+                    entity.switchStyle('selected', $__selected);
+                    entity.trigger($__selected ? 'select' : 'deselect');
+                    entity.sheet.trigger($__selected ? 'select' : 'deselect', entity);
+                    $__selected && entity.sheet.entities.forEach(function (e) {
+                        e.markers.selected && (e !== entity) && (e.markers.selected = false)
+                    })
                 },
                 configurable: false,
                 enumerable: true
             });
 
-            entity.pushStyle('selected', defaultConfig.style);
+            entity.pushStyle('selected', defaultConfig.style, false, 100);
         }
     };
 
     return {
+        name: 'select',
         type: 'control',
-        description: {
-            name: 'select',
-            mode: 'daemon',
-            target: 'entity',
-            click: function (entity) {
-                var val;
-
-                init(entity);
-
-                val = entity.markers.selected;
-                entity.sheet.filter(function (e) {
-                    return e.markers.selected;
-                }).forEach(function (e) {
-                    e.markers.selected = false;
-                    e.disableStyle('selected');
-                });
-                entity.markers.selected = !val;
-                if (entity.markers.selected) {
-                    entity.trigger('select');
-                    entity.sheet.trigger('select', entity);
-                    entity.enableStyle('selected');
-                } else {
-                    entity.trigger('deselect');
-                    entity.sheet.trigger('deselect', entity);
-                    entity.disableStyle('selected');
-                }
-
-            }
+        mode: 'daemon',
+        target: 'entity',
+        init: init,
+        click: function (entity) {
+            entity.markers.selected = !entity.markers.selected;
         }
     };
 
