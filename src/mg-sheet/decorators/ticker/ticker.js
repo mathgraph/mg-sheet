@@ -1,20 +1,24 @@
-define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
+define(['lodash', './config'], function (_, defaultConfig) {
 
     function tickSymbol(config) {
-        return new paper.Symbol(new paper.Path.Line({
+        var p = new paper.Path.Line({
             from: [0, 0],
             to: [0, config.length],
             strokeColor: 'black',
             style: config.style
-        }))
+        }),
+            symbol = new paper.Symbol(p);
+
+        p.remove();
+
+        return symbol;
     }
 
     function drawTicks(entity, config) {
         var path, pathLength,
-            ticks, start, step, cur, symbol, tick;
-        entity = entity || this;
+            ticks, start, step, symbol;
         config = config || {};
-        utils.deepExtend(config, defaultConfig);
+        _.defaultsDeep(config, defaultConfig);
 
         entity.$__ticks = entity.$__ticks || new paper.Group();
         ticks = entity.$__ticks;
@@ -30,27 +34,18 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         start = pathLength * config.start;
         step = config.step.unit === '%' ? pathLength * config.step.length : +config.step.length;
 
-        if (config.direction.indexOf('>') !== -1) {
-            cur = start;
-            while (cur <= pathLength) {
+        _([start])
+            .concat(_.contains(config.direction, '>') ? _.range(start + step, pathLength, step) : [])
+            .concat(_.contains(config.direction, '<') ? _.range(start - step, 0, -step) : [])
+            .each(function (offset) {
+                var tick;
                 tick = symbol.place();
-                tick.rotate(path.getNormalAt(cur).angle + 90 || 0);
-                tick.translate(path.getPointAt(cur));
+                tick.rotate(path.getNormalAt(offset).angle + 90 + config.angle || 0);
+                tick.translate(path.getPointAt(offset));
                 ticks.addChild(tick);
-                cur += step;
-            }
-        }
+            })
+            .value();
 
-        if (config.direction.indexOf('<') !== -1) {
-            cur = start;
-            while (cur >= 0) {
-                tick = symbol.place();
-                tick.rotate(path.getNormalAt(cur).angle + 90 || 0);
-                tick.translate(path.getPointAt(cur));
-                ticks.addChild(tick);
-                cur -= step;
-            }
-        }
         entity.sheet.redraw();
         return entity;
     }
@@ -61,7 +56,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         decorate: function (entity) {
             entity.ticker = function (config) {
                 drawTicks(entity, config)
-                    .on('change', drawTicks.bind(entity));
+                    .on('change', drawTicks.bind(null, entity, config));
                 return entity;
             }
         }
