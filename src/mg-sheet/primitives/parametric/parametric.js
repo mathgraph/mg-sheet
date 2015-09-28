@@ -2,13 +2,13 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
     return {
         type: 'primitive',
         factory: function draw_parametric(fx, fy, interval, endPoints, dt, style) {
-            var sheet, parametric, initialStyle, calculatePoints, path;
+            var sheet, initialStyle, calculatePoints, path;
             sheet = this;
 
             dt = dt || defaultConfig.dt;
-            initialStyle = utils.clone(defaultConfig.style || {});
-            utils.deepExtend(initialStyle, sheet.style);
-            utils.deepExtend(initialStyle, style);
+            //initialStyle = utils.clone(defaultConfig.style || {});
+            //utils.deepExtend(initialStyle, sheet.style);
+            //utils.deepExtend(initialStyle, style);
 
             calculatePoints = function (fx, fy, interval, endPoints, dt) {
                 var t, points = [];
@@ -27,8 +27,9 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             });
             path.simplify();
 
-            parametric = {
-                $__initialStyle: initialStyle,
+            return {
+                defaultStyle: defaultConfig.style,
+                initialStyle: style,
                 $__path: path,
                 get style() {
                     return this.$__path.style
@@ -78,8 +79,6 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 },
                 sheet: sheet
             };
-
-            return parametric;
         }
     }
 });
