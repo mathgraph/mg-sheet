@@ -8,7 +8,7 @@ define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor'], f
 
         charger
             .filter({ target: 'entity' })
-            .concat(charger.filter({ target: entity.type }))
+            .concat(charger.filter({ target: entity.type }).value())
             .pluck('init')
             .filter(_.isFunction)
             .each(function (fn) {
@@ -20,10 +20,10 @@ define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor'], f
             entity.on(eventName, function (event) {
                 charger
                     .filter({ enabled: true, target: 'entity' })
-                    .concat(charger.filter({ target: entity.type }))
+                    .concat(charger.filter({ target: entity.type }).value())
                     .pluck(eventName)
                     .filter(_.isFunction)
-                    .each(function (fn) {
+                    .each(function (fn, event) {
                         fn(entity);
                     })
                     .value();
@@ -47,8 +47,9 @@ define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor'], f
                     _.chain(sheet.charger)
                         .filter({ enabled: true, target: 'sheet' })
                         .pluck(eventName)
+                        .filter(_.isFunction)
                         .each(function (fn) {
-                            fn(sheet);
+                            fn(sheet, event);
                         })
                         .value();
                 });
@@ -72,7 +73,7 @@ define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor'], f
                         ctrl.mode === 'single' && $__enabled &&
                             _.chain(sheet.charger)
                                 .filter({ mode: 'single', enabled: true })
-                                .each(function (c) { c.enabled = false; })
+                                .each(function (c) { c !== ctrl && (c.enabled = false) })
                                 .value();
                     },
                     enumerable: true,
