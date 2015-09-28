@@ -16,7 +16,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     entity.switchStyle('highlighted', $__highlighted);
                 }
             });
-            entity.pushStyle('highlighted', defaultConfig.style);
+            entity.pushStyle('highlighted', defaultConfig.style, false, 99);
         }
     };
 

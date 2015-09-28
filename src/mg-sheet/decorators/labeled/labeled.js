@@ -30,6 +30,8 @@ define(['lodash', './config'], function (_, defaultConfig) {
                 label.content = content(offset.toFixed(config.toFixed));
                 normal = path.getNormalAt(offset);
                 normal.length = config.length;
+                normal.x = normal.x || 0;
+                normal.y = normal.y || 0;
                 label.position = path.getPointAt(offset);
                 label.rotate(config.angle || 0);
                 label.translate(normal);

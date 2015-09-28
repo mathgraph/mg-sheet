@@ -1,12 +1,17 @@
 define(['lodash', './config'], function (_, defaultConfig) {
 
     function tickSymbol(config) {
-        return new paper.Symbol(new paper.Path.Line({
+        var p = new paper.Path.Line({
             from: [0, 0],
             to: [0, config.length],
             strokeColor: 'black',
             style: config.style
-        }))
+        }),
+            symbol = new paper.Symbol(p);
+
+        p.remove();
+
+        return symbol;
     }
 
     function drawTicks(entity, config) {

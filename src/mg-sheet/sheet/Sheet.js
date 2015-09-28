@@ -41,6 +41,28 @@ define(['paper', 'lodash', './config'], function (paper, _, defaultConfig) {
         return sheet;
     };
 
+    Sheet.prototype.diagonal = function (style) {
+        var sheet = this,
+            line, diag, tmp;
+
+        diag = Math.sqrt(sheet.width * sheet.width + sheet.height * sheet.height);
+        line = new paper.Path.Line({
+            from: [0, 0],
+            to: [diag, 0],
+            style: style
+        });
+
+        //tmp = paper.view.onResize;
+        //paper.view.onResize = function () {
+        //    var d;
+        //    tmp();
+        //    d = Math.sqrt(sheet.width * sheet.width + sheet.height * sheet.height);
+        //    line.scale(d / diag);
+        //    diag = d;
+        //};
+        return new paper.Symbol(line);
+    };
+
     return Sheet;
 
 });

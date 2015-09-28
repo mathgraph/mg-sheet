@@ -23,7 +23,7 @@ require(['mg-sheet'], function (Sheet) {
         point_down;
 
     s = new Sheet('canvas');
-    tmp = s.draw_arrow([0, 0], [300, 300]).ticker().labeled();
+    tmp = s.draw_arrow([0, 0], [300, 300]).grid().labeled();
     tmp = s.draw_segment([0, 0], [300, -300]);
     current = undefined;
     s.on('mouseDown', function (event) {
@@ -31,10 +31,12 @@ require(['mg-sheet'], function (Sheet) {
     s.on('mouseDrag', function (event) {
         if (!current) {
             point_down = event.point;
-            current = s.draw_circle(event.point).ticker().labeled();
+            current = s.draw_circle(event.point).grid().ticker();
+            //current = s.draw_arrow(event.point, event.point).ticker().labeled().grid();
             current.markers.selected = true;
         }
         current.fit(point_down, event.point);
+        //current.to = event.point;
     });
     s.on('mouseUp', function (event) {
         if (!current) {
