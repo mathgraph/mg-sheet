@@ -45,7 +45,7 @@ define(['paper', 'lodash', './config'], function (paper, _, defaultConfig) {
         var sheet = this,
             line, diag, tmp;
 
-        diag = Math.sqrt(sheet.width * sheet.width + sheet.height * sheet.height);
+        diag = 2 * Math.sqrt(sheet.width * sheet.width + sheet.height * sheet.height);
         line = new paper.Path.Line({
             from: [0, 0],
             to: [diag, 0],

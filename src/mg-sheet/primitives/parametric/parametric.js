@@ -2,28 +2,22 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
     return {
         type: 'primitive',
         factory: function draw_parametric(fx, fy, interval, endPoints, dt, style) {
-            var sheet, initialStyle, calculatePoints, path;
+            var sheet, initialStyle, path;
             sheet = this;
 
             dt = dt || defaultConfig.dt;
-            //initialStyle = utils.clone(defaultConfig.style || {});
-            //utils.deepExtend(initialStyle, sheet.style);
-            //utils.deepExtend(initialStyle, style);
 
-            calculatePoints = function (fx, fy, interval, endPoints, dt) {
-                var t, points = [];
-                for (t = endPoints[0] ? interval[0] : interval[0] + dt; t < interval[1]; t += dt) {
+            function calculatePoints(fx, fy, interval, endPoints, dt) {
+                var points = [];
+                for (var t = interval[0] + (!endPoints[0] && dt); t < interval[1]; t += dt) {
                     points.push([fx(t), fy(t)]);
                 }
-                if (endPoints[1]) {
-                    points.push([fx(interval[1]), fy(interval[1])]);
-                }
+                endPoints[1] && points.push([fx(interval[1]), fy(interval[1])]);
                 return points;
-            };
+            }
 
             path = new paper.Path({
-                segments: calculatePoints(fx, fy, interval, endPoints, dt),
-                style: initialStyle
+                segments: calculatePoints(fx, fy, interval, endPoints, dt)
             });
             path.simplify();
 
