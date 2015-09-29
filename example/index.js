@@ -19,17 +19,19 @@ require.config({
 });
 
 require(['mg-sheet'], function (Sheet) {
-    var s, point_down, fx, fy;
+    var s, point_down, fx, fy, fr;
 
     s = new Sheet('canvas');
 
     fx = function (t) {
-        return t * 10 * Math.cos(t);
+        return t * 20 * Math.cos(t);
     };
     fy = function (t) {
         return 200 * Math.sin(t);
     };
-    tmp = s.draw_parametric(fx, fy, [-8.5 * Math.PI, 8.5 * Math.PI], [true, true], 0.01);
+
+    tmp = s.draw_parametric(fx, fy, [0, 10], [true, true], 0.0005);
+    tmp.fy = [0, 9.5];
 
     tmp = s.draw_arrow([0, 0], [300, 300]).grid().labeled();
     tmp = s.draw_segment([0, 0], [300, -300]);

@@ -14,6 +14,7 @@ define(['paper', 'lodash', './config'], function (paper, _, defaultConfig) {
         sheet.config = _.defaultsDeep(config, defaultConfig);
 
         sheet.config.centralize && (sheet.$__project.view.center = [0, 0]);
+        sheet.center = [sheet.$__project.view.center.x, sheet.$__project.view.center.y];
 
         sheet.$__project.tool = new paper.Tool();
         sheet.$__project.tool.maxDistance = 0;
@@ -31,7 +32,7 @@ define(['paper', 'lodash', './config'], function (paper, _, defaultConfig) {
         _.assign(Sheet, ext.statics);
         return Sheet;
     };
-    Sheet.module = function (smth) {-
+    Sheet.module = function (smth) {
         Sheet[smth.type](smth);
     };
 
