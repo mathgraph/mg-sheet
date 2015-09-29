@@ -9,8 +9,8 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             };
             fxMemoizeLinear = _.memoize(fx);
             fyMemoizeLinear = _.memoize(fy);
-            fxMemoizeNotLinear = _.memoize(_.flow(fr, fx));
-            fyMemoizeNotLinear = _.memoize(_.flow(fr, fy));
+            fxMemoizeNotLinear = _.memoize(_.flow(fr, fxMemoizeLinear));
+            fyMemoizeNotLinear = _.memoize(_.flow(fr, fyMemoizeLinear));
 
             dt = dt || defaultConfig.dt;
 
@@ -69,14 +69,14 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 set fx(f) {
                     fx = f;
                     fxMemoizeLinear = _.memoize(fx);
-                    fxMemoizeNotLinear = _.memoize(_.flow(fr, fx));
+                    fxMemoizeNotLinear = _.memoize(_.flow(fr, fxMemoizeLinear));
                     this.$__path.segments = calculatePoints(fx, fy, interval, endPoints, dt);
                     this.$__path.simplify();
                 },
                 set fy(f) {
                     fy = f;
                     fyMemoizeLinear = _.memoize(fy);
-                    fyMemoizeNotLinear = _.memoize(_.flow(fr, fy));
+                    fyMemoizeNotLinear = _.memoize(_.flow(fr, fyMemoizeLinear));
                     this.$__path.segments = calculatePoints(fx, fy, interval, endPoints, dt);
                     this.$__path.simplify();
                 },
