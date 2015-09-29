@@ -31,7 +31,7 @@ require(['mg-sheet'], function (Sheet) {
     };
 
     tmp = s.draw_parametric(fx, fy, [0, 10], [true, true], 0.0005);
-    tmp.fy = [0, 9.5];
+    tmp.interval = [0, 9.5];
 
     tmp = s.draw_arrow([0, 0], [300, 300]).grid().labeled();
     tmp = s.draw_segment([0, 0], [300, -300]);
