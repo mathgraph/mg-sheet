@@ -9,6 +9,9 @@ define(['lodash', './config'], function (_, defaultConfig) {
             labels, start, step, count = 0;
         config = config || {};
         _.defaultsDeep(config, defaultConfig);
+        content = content || function (o) {
+                return o.toFixed(config.toFixed);
+            };
 
         entity.$__labels = entity.$__labels || new paper.Group();
         labels = entity.$__labels;
@@ -27,7 +30,7 @@ define(['lodash', './config'], function (_, defaultConfig) {
             .each(function (offset) {
                 var normal, label;
                 label = makeLabel(config);
-                label.content = content(offset.toFixed(config.toFixed));
+                label.content = content(offset - start);
                 normal = path.getNormalAt(offset);
                 normal.length = config.length;
                 normal.x = normal.x || 0;
@@ -48,7 +51,10 @@ define(['lodash', './config'], function (_, defaultConfig) {
         name: 'labeled',
         decorate: function (entity) {
             entity.labeled = function (content, config) {
-                content = content || _.identity;
+                if (!_.isFunction(content)) {
+                    config = content;
+                    content = null;
+                }
                 drawLabels(entity, content, config)
                     .on('change', drawLabels.bind(null, entity, content, config));
                 return entity;
