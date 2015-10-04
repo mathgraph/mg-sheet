@@ -29,10 +29,11 @@ require(['mg-sheet'], function (Sheet) {
     fy = function (t) {
         return 200 * Math.sin(t);
     };
-    tmp = s.draw_parametric(fx, fy, [-8.5 * Math.PI, 8.5 * Math.PI], [true, true], 0.01);
+    //tmp = s.draw_parametric(fx, fy, [-8.5 * Math.PI, 8.5 * Math.PI], [true, true], 0.01);
 
-    tmp = s.draw_arrow([0, 0], [300, 300]).grid().labeled();
-    tmp = s.draw_segment([0, 0], [300, -300]);
+    tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled();
+    tmp.hide();
+    //tmp = s.draw_segment([0, 0], [300, -300]);
     current = undefined;
     s.on('mouseDown', function (event) {
     });

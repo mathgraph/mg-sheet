@@ -47,16 +47,19 @@ define(['lodash', '../utils/common'], function (_, utils) {
                     var entity = this;
                     entity.$__path && entity.$__path.remove();
                     _.pull(sheet.entities, entity);
+                    entity.sheet.redraw();
                     return entity;
                 },
                 hide: function () {
                     var entity = this;
-                    entity.$__path && entity.$__path.hide();
+                    entity.$__path && (entity.$__path.visible = false);
+                    entity.sheet.redraw();
                     return entity;
                 },
                 show: function () {
                     var entity = this;
-                    entity.$__path && entity.$__path.show();
+                    entity.$__path && (entity.$__path.visible = true);
+                    entity.sheet.redraw();
                     return entity;
                 },
                 markers: {},

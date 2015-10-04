@@ -59,6 +59,21 @@ define(['lodash', './config'], function (_, defaultConfig) {
                     .on('change', drawLabels.bind(null, entity, content, config));
                 return entity;
             }
+        },
+        hide: function (entity) {
+            entity.$__labels && (entity.$__labels.visible = false);
+            entity.sheet.redraw();
+            return entity;
+        },
+        show: function (entity) {
+            entity.$__labels && (entity.$__labels.visible = true);
+            entity.sheet.redraw();
+            return entity;
+        },
+        remove: function (entity) {
+            entity.$__labels && entity.$__labels.remove();
+            entity.sheet.redraw();
+            return entity;
         }
     }
 

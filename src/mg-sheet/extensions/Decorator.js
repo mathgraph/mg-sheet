@@ -11,6 +11,17 @@ define(['lodash', 'mg-sheet/extensions/Entity'], function (_, Entity) {
 
     });
 
+    var funcMap = ['show', 'hide', 'remove'];
+    funcMap.forEach(function (f) {
+        Entity.statics.Entity[f] = _.flow(Entity.statics.Entity[f], function () {
+            var entity = this;
+            _.forOwn(Entity.decorators, function (dec) {
+                dec[f] && dec[f](entity);
+            });
+            return entity;
+        })
+    });
+
     return {
         name: 'Decorator',
         type: 'extension',

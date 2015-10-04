@@ -64,6 +64,21 @@ define(['lodash', './config'], function (_, defaultConfig) {
                     .on('change', drawGrid.bind(null, entity, config));
                 return entity;
             }
+        },
+        hide: function (entity) {
+            entity.$__grid && (entity.$__grid.visible = false);
+            entity.sheet.redraw();
+            return entity;
+        },
+        show: function (entity) {
+            entity.$__grid && (entity.$__grid.visible = true);
+            entity.sheet.redraw();
+            return entity;
+        },
+        remove: function (entity) {
+            entity.$__grid && entity.$__grid.remove();
+            entity.sheet.redraw();
+            return entity;
         }
     }
 

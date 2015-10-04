@@ -59,6 +59,21 @@ define(['lodash', './config'], function (_, defaultConfig) {
                     .on('change', drawTicks.bind(null, entity, config));
                 return entity;
             }
+        },
+        hide: function (entity) {
+            entity.$__ticks && (entity.$__ticks.visible = false);
+            entity.sheet.redraw();
+            return entity;
+        },
+        show: function (entity) {
+            entity.$__ticks && (entity.$__ticks.visible = true);
+            entity.sheet.redraw();
+            return entity;
+        },
+        remove: function (entity) {
+            entity.$__ticks && entity.$__ticks.remove();
+            entity.sheet.redraw();
+            return entity;
         }
     }
 
