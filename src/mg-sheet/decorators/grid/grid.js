@@ -15,6 +15,7 @@ define(['lodash', './config'], function (_, defaultConfig) {
         _.defaultsDeep(config, defaultConfig);
 
         entity.$__grid = entity.$__grid || new paper.Group();
+        entity.$__grid.sendToBack();
         grid = entity.$__grid;
 
         entity.$__gridSymbol = entity.$__gridSymbol || entity.sheet.diagonal(config.style);
