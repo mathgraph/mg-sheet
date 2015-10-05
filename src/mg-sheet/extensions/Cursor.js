@@ -15,10 +15,10 @@ define(['lodash', 'mg-sheet/utils/common', 'mg-sheet/extensions/Entity'], functi
 
     Entity.initial(function () {
         var entity = this;
-
+        entity.interactive = _.isUndefined(entity.sheet.interactive) ? true : entity.sheet.interactive;
         _.forOwn(routes, function (val, key) {
             entity.$__path[key] = function (event) {
-                entity.trigger(val, event);
+                entity.interactive && entity.trigger(val, event);
             }
         });
     });

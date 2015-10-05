@@ -31,8 +31,8 @@ require(['mg-sheet'], function (Sheet) {
     };
     //tmp = s.draw_parametric(fx, fy, [-8.5 * Math.PI, 8.5 * Math.PI], [true, true], 0.01);
 
-    tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled();
-    tmp.hide();
+    tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled().set('interactive', false);
+    //tmp.hide();
     //tmp = s.draw_segment([0, 0], [300, -300]);
     current = undefined;
     s.on('mouseDown', function (event) {
