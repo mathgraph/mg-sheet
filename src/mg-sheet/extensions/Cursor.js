@@ -19,6 +19,7 @@ define(['lodash', 'mg-sheet/utils/common', 'mg-sheet/extensions/Entity'], functi
         _.forOwn(routes, function (val, key) {
             entity.$__path[key] = function (event) {
                 entity.interactive && entity.trigger(val, event);
+                entity.interactive && entity.sheet.trigger('entity-' + val, entity);
             }
         });
     });
