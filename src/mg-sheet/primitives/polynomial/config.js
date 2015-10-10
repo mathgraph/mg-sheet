@@ -1,7 +1,7 @@
 define(function () {
     return {
-        radius: 8,
-        eps: 1,
+        radius: 5,
+        eps: 0.2,
         style: {
             strokeColor: "red"
         }
