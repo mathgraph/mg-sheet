@@ -1,4 +1,4 @@
-define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor'], function (_, Entity) {
+define(['lodash', 'mg-sheet/extensions/Entity', 'mg-sheet/extensions/Cursor', 'mg-sheet/extensions/Style'], function (_, Entity) {
 
     var Charger = {};
 
