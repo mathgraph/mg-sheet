@@ -31,7 +31,31 @@ require(['mg-sheet'], function (Sheet) {
     };
     //tmp = s.draw_parametric(fx, fy, [-8.5 * Math.PI, 8.5 * Math.PI], [true, true], 0.01);
 
-    tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled().set('interactive', false);
+
+    //tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled().set('interactive', false);
+
+
+
+
+    //start test polynomial
+
+    // x^2 - y^2 = 40000 точки находятся на границе экрана
+    tmp = s.draw_polynomial([[-1, 0, 2], [1, 2, 0], [-40000, 0, 0]], [[200, 0], [-200, 0]]);
+
+    // y + 0.05 * x^2 = 0 выбрана точка не на границе, это неправиль, будет построенная лишь половина графика
+    tmp = s.draw_polynomial([[1, 0, 1], [0.05, 2, 0]], [[0, 0]], {}, {strokeColor: "blue" });
+
+    // 4 * y^2 + x^2 = 40000
+    tmp = s.draw_polynomial([[4, 0, 2], [1, 2, 0], [-40000, 0, 0]], [[200, 0]], {}, {strokeColor: "green" });
+
+    //  x^2 = y^2
+    tmp = s.draw_polynomial([[2, 0, 2], [-1, 2, 0]], [[0, 0]], {startRadiusFactor: 2}, {strokeColor: "yellow", strokeWidth: 2 });
+    //tmp.coefficients = [[2, 0, 1], [-1, 1, 0]];
+
+    // end test polynomial
+
+
+    //tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled();
     //tmp.hide();
     //tmp = s.draw_segment([0, 0], [300, -300]);
     current = undefined;
