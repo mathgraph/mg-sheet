@@ -1,4 +1,22 @@
 define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
+    function arrayDeepEquals(arr1, arr2) {
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+        var result = true;
+        arr1.forEach(function (item, i) {
+            if (arr1[i].length !== arr2[i].length) {
+                result = false;
+            }
+            item.forEach(function (item, j) {
+                if (arr1[i][j] !== arr2[i][j]) {
+                    result = false;
+                }
+            })
+        });
+        return result;
+    }
+
     return {
         type: 'primitive',
         factory: function draw_polynomial(coefficients, points, config, style) {
@@ -153,18 +171,33 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 get coefficients() {
                     return coefficients;
                 },
+                $__changed: false,
                 set coefficients(c) {
-                    coefficients = c;
-                    this.$__path.segments = getStegments(points);
-                    this.$__path.simplify();
+                    if (!arrayDeepEquals(coefficients, c)) {
+                        coefficients = c;
+                        this.$__changed = true;
+                    }
                 },
                 get points() {
                     return points;
                 },
                 set points(c) {
                     points = c;
+                },
+                $__inprogress: false,
+                recalc: function () {
+                    if (this.$__inprogress) {
+                        return;
+                    }
+                    if (!this.$__changed) {
+                        return;
+                    }
+                    this.$__inprogress = true;
                     this.$__path.segments = getStegments(points);
                     this.$__path.simplify();
+                    this.$__inprogress = false;
+                    this.$__changed = false;
+                    return this;
                 },
                 get config() {
                     return config;

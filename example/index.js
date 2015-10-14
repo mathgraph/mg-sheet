@@ -49,8 +49,12 @@ require(['mg-sheet'], function (Sheet) {
     tmp = s.draw_polynomial([[4, 0, 2], [1, 2, 0], [-40000, 0, 0]], [[200, 0]], {}, {strokeColor: "green" });
 
     //  x^2 = y^2
+    // 2*y-x=0
     tmp = s.draw_polynomial([[2, 0, 2], [-1, 2, 0]], [[0, 0]], {startRadiusFactor: 2}, {strokeColor: "yellow", strokeWidth: 2 });
-    //tmp.coefficients = [[2, 0, 1], [-1, 1, 0]];
+    tmp.coefficients = [[2, 0, 1], [-1, 1, 0]];
+    tmp.recalc();
+
+    tmp = s.draw_polynomial([[1, 2, 0], [1, 0, 2], [-100, 0, 0]], [[10, 0]], {radius: 2, eps: 0.02});
 
     // end test polynomial
 
