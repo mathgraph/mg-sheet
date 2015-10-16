@@ -11,9 +11,8 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     style: style
                 }),
                 delta;
-            if (!(point2 instanceof paper.Point)) {
-                point2 = new paper.Point(point2);
-            }
+            point1 = new paper.Point(point1);
+            point2 = new paper.Point(point2);
             delta = point2.subtract(point1);
             line.position = point1;
             line.rotate(delta.angle);
@@ -33,10 +32,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 },
                 set point1(v) {
                     var deltaOld = point2.subtract(point1);
-                    point1 = v;
-                    if (!(point2 instanceof paper.Point)) {
-                        point2 = new paper.Point(point2);
-                    }
+                    point1 = new paper.Point(v);
                     delta = point2.subtract(point1);
                     line.position = point1;
                     line.rotate(delta.angle - deltaOld.angle);
@@ -48,7 +44,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 },
                 set point2(v) {
                     var deltaOld = point2.subtract(point1);
-                    point2 = v;
+                    point2 = new paper.Point(v);
                     if (!(point2 instanceof paper.Point)) {
                         point2 = new paper.Point(point2);
                     }
