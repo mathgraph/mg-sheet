@@ -33,7 +33,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 },
                 set point1(v) {
                     point1 = v;
-                    if (!point2 instanceof paper.Point) {
+                    if (!(point2 instanceof paper.Point)) {
                         point2 = new paper.Point(point2);
                     }
                     delta = point2.subtract(point1);
@@ -47,7 +47,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 },
                 set point2(v) {
                     point2 = v;
-                    if (!point2 instanceof paper.Point) {
+                    if (!(point2 instanceof paper.Point)) {
                         point2 = new paper.Point(point2);
                     }
                     delta = point2.subtract(point1);
