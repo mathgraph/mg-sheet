@@ -46,7 +46,7 @@ define(['lodash', '../utils/common'], function (_, utils) {
                 remove: function () {
                     var entity = this;
                     entity.$__path && entity.$__path.remove();
-                    _.pull(sheet.entities, entity);
+                    _.pull(entity.sheet.entities, entity);
                     entity.sheet.redraw();
                     return entity;
                 },
