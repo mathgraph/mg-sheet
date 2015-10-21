@@ -34,9 +34,6 @@ require(['mg-sheet'], function (Sheet) {
 
     //tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled().set('interactive', false);
 
-
-
-
     //start test polynomial
 
     // x^2 - y^2 = 40000 точки находятся на границе экрана
@@ -58,7 +55,22 @@ require(['mg-sheet'], function (Sheet) {
 
     // end test polynomial
 
-    tmp= s.draw_line([0, 0], [1, 1]);
+    //s.draw_curve2({A: 1, B: -1, F: -40000});
+    var z = 1000;
+    var k = 25;
+    s.draw_curve2({A: k, B: -1, E: 2 * z, F: -z * z});
+    var z = 0;
+    s.draw_curve2({A: k, B: -1, E: 2 * z, F: -z * z});
+
+    //s.draw_curve2({A: 10000, B: 1, F: -40000});
+    s.draw_curve2({A: 10, B: 1, F: -40000});
+    s.draw_curve2({A: 0.1, B: 1, F: -40000});
+
+    //s.draw_curve2({D: 1, E: -1});
+    //tmp = s.draw_polynomial([[1, 1, 0], [1, 0, 1]], [[-323.95001220703125, 323.95001220703125],[323.95001220703125, -323.95001220703125]]);
+    //paper.view.zoom = 0.4
+
+    //tmp= s.draw_line([0, 0], [1, 1]);
     //tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled();
     //tmp.hide();
     //tmp = s.draw_segment([0, 0], [300, -300]);
