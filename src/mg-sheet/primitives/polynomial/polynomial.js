@@ -22,7 +22,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
         factory: function draw_polynomial(coefficients, points, config, style) {
             var sheet, path, segments, segments1, segments2, calculateFunction, root, radius, eps, startRadius,
                 leftBorderDrawing, rightBorderDrawing, topBorderDrawing, bottomBorderDrawing,
-                isPointInScope, serchSegment, setConfig, f;
+                isPointInScope, serchSegment, setConfig, f, getStegments;
             sheet = this;
 
             setConfig = function (config) {
