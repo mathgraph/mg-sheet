@@ -124,7 +124,7 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 },
                 set parametrs(v) {
                     parametrs = v;
-                    this.$__path.segments = calculatePoints(parametrs);
+                    this.$__path.segments = getSegments(parametrs);
                     this.$__path.simplify();
                 }
             }
