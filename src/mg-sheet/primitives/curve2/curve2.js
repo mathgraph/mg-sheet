@@ -1,11 +1,10 @@
 define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
-    var calculateX, calculateY;
+    var calculateX, calculateY, getSegments;
     calculateX = function (y, a, b, c, d, e, f) {
         var D, ae, be, ce;
         ae = a;
         be = c * y + d;
         ce = b * y * y + e * y + f;
-
         if (Math.abs(a) <= defaultConfig.deltaZero) {
             return [-(ce) / (be)];
         } else {
@@ -24,54 +23,33 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
     return {
         type: 'primitive',
         factory: function draw_curve2(parametrs, style) {
-            var sheet, a, b, c, d, e, f, points, points1, points2, i, flag, path,
-                leftBorderDrawing, rightBorderDrawing, topBorderDrawing, bottomBorderDrawing, previousPoint;
+            var sheet, path, getSegments, leftBorderDrawing, rightBorderDrawing, topBorderDrawing, bottomBorderDrawing;
             sheet = this;
             leftBorderDrawing = (sheet.center[0] - sheet.width / 2) - 3 * defaultConfig.step;
             rightBorderDrawing = (sheet.center[0] + sheet.width / 2) + 3 * defaultConfig.step;
             topBorderDrawing = (sheet.center[1] + sheet.height / 2) + 3 * defaultConfig.step;
             bottomBorderDrawing = (sheet.center[1] - sheet.height / 2) - 3 * defaultConfig.step;
-            a = parametrs.A;
-            b = parametrs.B;
-            c = parametrs.C;
-            d = parametrs.D;
-            e = parametrs.E;
-            f = parametrs.F;
-            points = [];
-            points1 = [];
-            points2 = [];
-            flag = false;
 
-
-            for (i = bottomBorderDrawing; i <= topBorderDrawing + defaultConfig.step; i += defaultConfig.step) {
-                var res = calculateX(i, a, b, c, d, e, f);
-                if (res.length > 0) {
-                    if (res[0] < rightBorderDrawing && res[0] > leftBorderDrawing)
-                        (points1.push([res[0], i]));
-                    if (res.length === 2 && res[1] < rightBorderDrawing && res[1] > leftBorderDrawing)
-                        points2.push([res[1], i]);
-                    flag = true;
-                } else {
-                    if (flag && (points1.length !== 0 || points2.length !== 0)) {
-                        points = points.concat(points1.concat(points2.reverse()));
-                        points.push(points1[0]);
-                        points1 = [];
-                        points2 = [];
-                    }
-                    flag = false;
-                }
-            }
-            if (points.length + points1.length + points2.length < 5) {
+            getSegments = function (parametrs) {
+                var a, b, c, d, e, f, points, points1, points2, i, flag, previousPoint;
+                a = parametrs.A;
+                b = parametrs.B;
+                c = parametrs.C;
+                d = parametrs.D;
+                e = parametrs.E;
+                f = parametrs.F;
                 points = [];
                 points1 = [];
                 points2 = [];
-                for (i = leftBorderDrawing; i <= rightBorderDrawing + defaultConfig.step; i += defaultConfig.step) {
-                    var res = calculateY(i, a, b, c, d, e, f);
+                flag = false;
+
+                for (i = bottomBorderDrawing; i <= topBorderDrawing + defaultConfig.step; i += defaultConfig.step) {
+                    var res = calculateX(i, a, b, c, d, e, f);
                     if (res.length > 0) {
-                        if (res[0] < topBorderDrawing && res[0] > bottomBorderDrawing)
-                            (points1.push([i, res[0]]));
-                        if (res.length === 2 && res[1] < topBorderDrawing && res[1] > bottomBorderDrawing)
-                            points2.push([i, res[1]]);
+                        if (res[0] < rightBorderDrawing && res[0] > leftBorderDrawing)
+                            (points1.push([res[0], i]));
+                        if (res.length === 2 && res[1] < rightBorderDrawing && res[1] > leftBorderDrawing)
+                            points2.push([res[1], i]);
                         flag = true;
                     } else {
                         if (flag && (points1.length !== 0 || points2.length !== 0)) {
@@ -83,31 +61,55 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                         flag = false;
                     }
                 }
-            }
-
-            if (flag && (points1.length !== 0 || points2.length !== 0)) {
-                points1 = points1.reverse().concat(points2);
-                points1.push(points1[0]);
-                if (points.length != 0) {
-                    previousPoint = points[points.length - 1];
-                    if (previousPoint[0] >= rightBorderDrawing || previousPoint[1] >= topBorderDrawing) {
-                        points.push([rightBorderDrawing, topBorderDrawing]);
-                        if (points1[0][0] <= leftBorderDrawing || points1[0][1] <= bottomBorderDrawing) {
-                            points.push([rightBorderDrawing, bottomBorderDrawing]);
-                            points.push([leftBorderDrawing, bottomBorderDrawing]);
-                        }
-                    } else if (previousPoint[0] <= leftBorderDrawing || previousPoint[1] <= bottomBorderDrawing) {
-                        points.push([leftBorderDrawing, bottomBorderDrawing]);
-                        if (points1[0][0] >= rightBorderDrawing || points1[0][1] >= topBorderDrawing) {
-                            points.push([leftBorderDrawing, topBorderDrawing]);
-                            points.push([rightBorderDrawing, topBorderDrawing]);
+                if (points.length + points1.length + points2.length < 5) {
+                    points = [];
+                    points1 = [];
+                    points2 = [];
+                    for (i = leftBorderDrawing; i <= rightBorderDrawing + defaultConfig.step; i += defaultConfig.step) {
+                        var res = calculateY(i, a, b, c, d, e, f);
+                        if (res.length > 0) {
+                            if (res[0] < topBorderDrawing && res[0] > bottomBorderDrawing)
+                                (points1.push([i, res[0]]));
+                            if (res.length === 2 && res[1] < topBorderDrawing && res[1] > bottomBorderDrawing)
+                                points2.push([i, res[1]]);
+                            flag = true;
+                        } else {
+                            if (flag && (points1.length !== 0 || points2.length !== 0)) {
+                                points = points.concat(points1.concat(points2.reverse()));
+                                points.push(points1[0]);
+                                points1 = [];
+                                points2 = [];
+                            }
+                            flag = false;
                         }
                     }
                 }
-                points = points.concat(points1);
-            }
+                if (flag && (points1.length !== 0 || points2.length !== 0)) {
+                    points1 = points1.reverse().concat(points2);
+                    points1.push(points1[0]);
+                    if (points.length != 0) {
+                        previousPoint = points[points.length - 1];
+                        if (previousPoint[0] >= rightBorderDrawing || previousPoint[1] >= topBorderDrawing) {
+                            points.push([rightBorderDrawing, topBorderDrawing]);
+                            if (points1[0][0] <= leftBorderDrawing || points1[0][1] <= bottomBorderDrawing) {
+                                points.push([rightBorderDrawing, bottomBorderDrawing]);
+                                points.push([leftBorderDrawing, bottomBorderDrawing]);
+                            }
+                        } else if (previousPoint[0] <= leftBorderDrawing || previousPoint[1] <= bottomBorderDrawing) {
+                            points.push([leftBorderDrawing, bottomBorderDrawing]);
+                            if (points1[0][0] >= rightBorderDrawing || points1[0][1] >= topBorderDrawing) {
+                                points.push([leftBorderDrawing, topBorderDrawing]);
+                                points.push([rightBorderDrawing, topBorderDrawing]);
+                            }
+                        }
+                    }
+                    points = points.concat(points1);
+                }
+                return points;
+            };
+
             path = new paper.Path({
-                segments: points
+                segments: getSegments(parametrs)
             });
             path.simplify();
 
@@ -116,7 +118,15 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 defaultStyle: defaultConfig.style,
                 $__path: path,
                 initialStyle: style,
-                sheet: sheet
+                sheet: sheet,
+                get parametrs() {
+                    return parametrs
+                },
+                set parametrs(v) {
+                    parametrs = v;
+                    this.$__path.segments = calculatePoints(parametrs);
+                    this.$__path.simplify();
+                }
             }
         }
     }
