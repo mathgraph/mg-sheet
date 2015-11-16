@@ -29,11 +29,12 @@ require(['mg-sheet'], function (Sheet) {
     fy = function (t) {
         return 200 * Math.sin(t);
     };
+    tmp = s.draw_curve2({A: 91, B: -178, C: -203, D: 0, E: -1, F: 0});
     tmp = s.draw_curve2({A: 1, B: 2, C: 0, D: 0, E: 0, F: -40000});
     tmp = s.draw_curve2({A: 1, B: 0, C: 0, D: 0, E: -0, F: -40000});
     tmp = s.draw_curve2({A: 0, B: 1, C: 0, D: 0, E: -0, F: -40000});
-    tmp.coefficients = {A: 0, B: 1, C: 0, D: 1, E: -0, F: 0};
-    //paper.view.zoom = 0.9;
+    //tmp.coefficients = {A: 0, B: 1, C: 0, D: 1, E: -0, F: 0};
+    paper.view.zoom = 0.9;
 
     //tmp = s.draw_parametric(fx, fy, [-8.5 * Math.PI, 8.5 * Math.PI], [true, true], 0.01);
 

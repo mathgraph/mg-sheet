@@ -58,7 +58,6 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                             prePointsIsVisible = true;
                         } else {
                             prePointsIsVisible && points1.push([res[0], i]);
-                            prePoint1 = [res[0], i];
                             prePointsIsVisible = false;
                         }
                         if (res.length === 2) {
@@ -68,7 +67,6 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                                 prePointsIsVisible = true;
                             } else {
                                 prePointsIsVisible && points1.push([res[0], i]);
-                                prePoint2 = [res[1], i];
                                 prePointsIsVisible = false;
                             }
                         }
@@ -83,8 +81,8 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                         prePointsIsExist = false;
                     }
                 }
-                if (prePointsIsExist && (points1.length !== 0 || points2.length !== 0)) {
-                    points1 = points1.reverse().concat(points2);
+                if (/*prePointsIsExist && */(points1.length !== 0 || points2.length !== 0)) {
+                    points1 = points1.concat(points2.reverse());
                     if (points.length != 0) {
                         previousPoint = points[points.length - 1];
                         if (previousPoint[0] >= rightBorderDrawing || previousPoint[1] >= topBorderDrawing) {
