@@ -1,5 +1,10 @@
 define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
-    var calculateX, calculateY, getSegments;
+    var calculateX, calculateY, coefficientsEquals;
+
+    coefficientsEquals = function (c1, c2) {
+        return c1.A === c2.A && c1.B === c2.B && c1.C === c2.C && c1.D === c2.D && c1.E === c2.E && c1.F === c2.F;
+    };
+
     calculateX = function (y, a, b, c, d, e, f) {
         var D, ae, be, ce;
         ae = a;
@@ -11,8 +16,9 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
             D = Math.pow(be, 2) - 4 * ae * (ce);
             if (D > defaultConfig.deltaZero) {
                 return [(-(be) + Math.sqrt(D)) / (2 * ae), (-(be) - Math.sqrt(D)) / (2 * ae)];
-            } else if (Math.abs(D) < defaultConfig.deltaZero)
+            } else if (Math.abs(D) < defaultConfig.deltaZero) {
                 return [(-(be)) / (2 * ae)];
+            }
         }
         return [];
     };
@@ -22,71 +28,63 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
 
     return {
         type: 'primitive',
-        factory: function draw_curve2(parametrs, style) {
-            var sheet, path, getSegments, leftBorderDrawing, rightBorderDrawing, topBorderDrawing, bottomBorderDrawing;
+        factory: function draw_curve2(coefficients, style) {
+            var sheet, path, getSegments, getArray,
+                leftBorderDrawing, rightBorderDrawing, topBorderDrawing, bottomBorderDrawing;
             sheet = this;
-            leftBorderDrawing = (sheet.center[0] - sheet.width / 2) - 3 * defaultConfig.step;
-            rightBorderDrawing = (sheet.center[0] + sheet.width / 2) + 3 * defaultConfig.step;
-            topBorderDrawing = (sheet.center[1] + sheet.height / 2) + 3 * defaultConfig.step;
-            bottomBorderDrawing = (sheet.center[1] - sheet.height / 2) - 3 * defaultConfig.step;
+            leftBorderDrawing = (sheet.center[0] - sheet.width / 2);
+            rightBorderDrawing = (sheet.center[0] + sheet.width / 2);
+            topBorderDrawing = (sheet.center[1] + sheet.height / 2);
+            bottomBorderDrawing = (sheet.center[1] - sheet.height / 2);
 
-            getSegments = function (parametrs) {
-                var a, b, c, d, e, f, points, points1, points2, i, flag, previousPoint;
-                a = parametrs.A;
-                b = parametrs.B;
-                c = parametrs.C;
-                d = parametrs.D;
-                e = parametrs.E;
-                f = parametrs.F;
+
+            getArray = function (begin, end, a, b, c, d, e, f) {
+                var points, points1, points2, i, prePointsIsExist, prePointsIsVisible,
+                    previousPoint, res, prePoint1, prePoint2;
                 points = [];
                 points1 = [];
                 points2 = [];
-                flag = false;
+                prePointsIsExist = false;
+                prePointsIsVisible = false;
+                prePoint1 = null;
+                prePoint2 = null;
 
-                for (i = bottomBorderDrawing; i <= topBorderDrawing + defaultConfig.step; i += defaultConfig.step) {
-                    var res = calculateX(i, a, b, c, d, e, f);
+                for (i = begin; i <= end; i += defaultConfig.step) {
+                    res = calculateX(i, a, b, c, d, e, f);
                     if (res.length > 0) {
-                        if (res[0] < rightBorderDrawing && res[0] > leftBorderDrawing)
-                            (points1.push([res[0], i]));
-                        if (res.length === 2 && res[1] < rightBorderDrawing && res[1] > leftBorderDrawing)
-                            points2.push([res[1], i]);
-                        flag = true;
+                        if (res[0] < rightBorderDrawing && res[0] > leftBorderDrawing) {
+                            !prePointsIsVisible && prePoint1 != null && points1.push([prePoint1, i - defaultConfig.step]);
+                            points1.push([res[0], i]);
+                            prePointsIsVisible = true;
+                        } else {
+                            prePointsIsVisible && points1.push([res[0], i]);
+                            prePoint1 = [res[0], i];
+                            prePointsIsVisible = false;
+                        }
+                        if (res.length === 2) {
+                            if (res[1] < rightBorderDrawing && res[1] > leftBorderDrawing) {
+                                !prePointsIsVisible && prePoint2 != null && points2.push([prePoint2, i - defaultConfig.step]);
+                                points2.push([res[1], i]);
+                                prePointsIsVisible = true;
+                            } else {
+                                prePointsIsVisible && points1.push([res[0], i]);
+                                prePoint2 = [res[1], i];
+                                prePointsIsVisible = false;
+                            }
+                        }
+                        prePointsIsExist = true;
                     } else {
-                        if (flag && (points1.length !== 0 || points2.length !== 0)) {
+                        if (prePointsIsExist) {
                             points = points.concat(points1.concat(points2.reverse()));
                             points.push(points1[0]);
                             points1 = [];
                             points2 = [];
                         }
-                        flag = false;
+                        prePointsIsExist = false;
                     }
                 }
-                if (points.length + points1.length + points2.length < 5) {
-                    points = [];
-                    points1 = [];
-                    points2 = [];
-                    for (i = leftBorderDrawing; i <= rightBorderDrawing + defaultConfig.step; i += defaultConfig.step) {
-                        var res = calculateY(i, a, b, c, d, e, f);
-                        if (res.length > 0) {
-                            if (res[0] < topBorderDrawing && res[0] > bottomBorderDrawing)
-                                (points1.push([i, res[0]]));
-                            if (res.length === 2 && res[1] < topBorderDrawing && res[1] > bottomBorderDrawing)
-                                points2.push([i, res[1]]);
-                            flag = true;
-                        } else {
-                            if (flag && (points1.length !== 0 || points2.length !== 0)) {
-                                points = points.concat(points1.concat(points2.reverse()));
-                                points.push(points1[0]);
-                                points1 = [];
-                                points2 = [];
-                            }
-                            flag = false;
-                        }
-                    }
-                }
-                if (flag && (points1.length !== 0 || points2.length !== 0)) {
+                if (prePointsIsExist && (points1.length !== 0 || points2.length !== 0)) {
                     points1 = points1.reverse().concat(points2);
-                    points1.push(points1[0]);
                     if (points.length != 0) {
                         previousPoint = points[points.length - 1];
                         if (previousPoint[0] >= rightBorderDrawing || previousPoint[1] >= topBorderDrawing) {
@@ -107,25 +105,40 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 }
                 return points;
             };
+            getSegments = function (coeff) {
+                var res = getArray(bottomBorderDrawing - 5 * defaultConfig.step, topBorderDrawing + 5 * defaultConfig.step,
+                    coeff.A, coeff.B, coeff.C, coeff.D, coeff.E, coeff.F);
+                if (res.length < 5) {
+                    res = getArray(leftBorderDrawing - 5 * defaultConfig.step, rightBorderDrawing + 5 * defaultConfig.step,
+                        coeff.B, coeff.A, coeff.C, coeff.E, coeff.D, coeff.F);
+                    res.forEach(function (p) {
+                        var k = p[0];
+                        p[0] = p[1];
+                        p[1] = k;
+                    });
+                }
+                return res;
+            };
 
             path = new paper.Path({
-                segments: getSegments(parametrs)
+                segments: getSegments(coefficients)
             });
             path.simplify();
-
 
             return {
                 defaultStyle: defaultConfig.style,
                 $__path: path,
                 initialStyle: style,
                 sheet: sheet,
-                get parametrs() {
-                    return parametrs
+                get coefficients() {
+                    return coefficients
                 },
-                set parametrs(v) {
-                    parametrs = v;
-                    this.$__path.segments = getSegments(parametrs);
-                    this.$__path.simplify();
+                set coefficients(v) {
+                    if (!coefficientsEquals(coefficients, v)) {
+                        coefficients = v;
+                        this.$__path.segments = getSegments(coefficients);
+                        this.$__path.simplify();
+                    }
                 }
             }
         }
