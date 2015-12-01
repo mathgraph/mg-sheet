@@ -29,15 +29,16 @@ require(['mg-sheet'], function (Sheet) {
     fy = function (t) {
         return 200 * Math.sin(t);
     };
-    tmp = s.draw_curve2({A: 1, B: 2, C: 0, D: 0, E: 0, F: -40000});
-    tmp = s.draw_curve2({A: 1, B: 2, C: 0, D: 0, E: 0, F: -40000});
-    tmp = s.draw_curve2({A: 1, B: 0, C: 0, D: 0, E: -0, F: -40000});
-    tmp = s.draw_curve2({A: 0, B: 1, C: 0, D: 0, E: -0, F: -40000});
-    //tmp.coefficients = {A: 0, B: 1, C: 0, D: 1, E: -0, F: 0};
-    //paper.view.zoom = 0.9;
+    //tmp = s.draw_curve2({A: 1, B: 2, C: 0, D: 0, E: 0, F: -40000});
+    //tmp = s.draw_curve2({A: 1, B: 2, C: 0, D: 0, E: 0, F: -40000});
+    //tmp = s.draw_curve2({A: 1, B: 0, C: 0, D: 0, E: -0, F: -40000});
+    //tmp = s.draw_curve2({A: 0, B: 1, C: 0, D: 0, E: -0, F: -40000});
+    //paper.view.zoom = 0.3;
 
-    //tmp = s.draw_parametric(fx, fy, [-8.5 * Math.PI, 8.5 * Math.PI], [true, true], 0.01);
-
+    tmp = s.draw_function(function(x) {return  100 / x});
+    tmp.func = function(x) {return  100 * Math.sin(1 / x * 100)};
+    //tmp = s.draw_function(function(x) {return  100 * Math.sin(1 / x * 100)});
+    //tmp = s.draw_function(function(x) {return  100 * Math.tan(x / 100)});
 
     //tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled().set('interactive', false);
 
@@ -65,7 +66,7 @@ require(['mg-sheet'], function (Sheet) {
 
     // end test polynomial
 
-    tmp= s.draw_line([0, 0], [1, 1]);
+    //tmp= s.draw_line([0, 0], [1, 1]);
     //tmp = s.draw_arrow([0, 0], [300, 300]).ticker().grid().labeled();
     //tmp.hide();
     //tmp = s.draw_segment([0, 0], [300, -300]);
