@@ -1,17 +1,20 @@
 define(['lodash', 'mg-sheet/utils/common', 'mg-sheet/extensions/Entity'], function (_, utils, Entity) {
 
     var routes = {
-        onMouseDown: 'mouseDown',
-        onMouseUp: 'mouseUp',
-        onMouseDrag: 'mouseDrag',
-        onMouseMove: 'mouseMove',
-        onKeyDown: 'keyDown',
-        onKeyUp: 'keyUp',
-        onClick: 'click',
-        onMouseEnter: 'mouseEnter',
-        onMouseLeave: 'mouseLeave',
-        onDoubleClick: 'doubleClick'
-    };
+            onMouseDown: 'mouseDown',
+            onMouseUp: 'mouseUp',
+            onMouseDrag: 'mouseDrag',
+            onMouseMove: 'mouseMove',
+            onKeyDown: 'keyDown',
+            onKeyUp: 'keyUp',
+            onClick: 'click',
+            onMouseEnter: 'mouseEnter',
+            onMouseLeave: 'mouseLeave',
+            onDoubleClick: 'doubleClick'
+        },
+        DOMRoutes = {
+            wheel: 'wheel'
+        };
 
     Entity.initial(function () {
         var entity = this;
@@ -40,7 +43,13 @@ define(['lodash', 'mg-sheet/utils/common', 'mg-sheet/extensions/Entity'], functi
                 }
             });
 
-            sheet.eventMap = _.values(routes);
+            _.forOwn(DOMRoutes, function (val, key) {
+                sheet.domElem.addEventListener(key, function (event) {
+                    sheet.trigger(val, event);
+                });
+            });
+
+            sheet.eventMap = _.values(routes).concat(_.values(DOMRoutes));
         }
     }
 
