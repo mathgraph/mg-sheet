@@ -29,36 +29,18 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
     return {
         type: 'primitive',
         factory: function draw_curve2(coefficients, style) {
-            var sheet, path, getSegments, getArray, connectSegments,
-                leftBorderDrawing, rightBorderDrawing, topBorderDrawing, bottomBorderDrawing;
-            sheet = this;
-            leftBorderDrawing = (sheet.center[0] - sheet.width / 2);
-            rightBorderDrawing = (sheet.center[0] + sheet.width / 2);
-            topBorderDrawing = (sheet.center[1] + sheet.height / 2);
-            bottomBorderDrawing = (sheet.center[1] - sheet.height / 2);
+            var path, sheet = this,
+                config = {
+                    left: (sheet.center[0] - sheet.width / 2),
+                    right: (sheet.center[0] + sheet.width / 2),
+                    top: (sheet.center[1] + sheet.height / 2),
+                    bottom: (sheet.center[1] - sheet.height / 2),
+                    width: sheet.width,
+                    height: sheet.height,
+                    step: defaultConfig.step
+                };
 
-            connectSegments = function (left, right, bottom, top, s1, s2) {
-                var previousPoint;
-                if (s1.length != 0 && s2.length != 0) {
-                    previousPoint = s1[s1.length - 1];
-                    if (previousPoint[0] >= right - 5 * defaultConfig.step || previousPoint[1] >= top - 5 * defaultConfig.step) {
-                        s1.push([right, top]);
-                        if (s2[0][0] <= left + 5 * defaultConfig.step || s2[0][1] <= bottom + 5 * defaultConfig.step) {
-                            s1.push([right, bottom]);
-                            s1.push([left, bottom]);
-                        }
-                    } else if (previousPoint[0] <= left + 5 * defaultConfig.step || previousPoint[1] <= bottom + 5 * defaultConfig.step) {
-                        s1.push([left, bottom]);
-                        if (s2[0][0] >= right - 5 * defaultConfig.step || s2[0][1] >= top - 5 * defaultConfig.step) {
-                            s1.push([left, top]);
-                            s1.push([right, top]);
-                        }
-                    }
-                }
-                return s1.concat(s2);
-            };
-
-            getArray = function (left, right, bottom, top, a, b, c, d, e, f) {
+            function getArray (config, a, b, c, d, e, f) {
                 var points, points1, points2, i, prePointsIsExist, prePointsIsVisible1, prePointsIsVisible2,
                     res, prePoint1, prePoint2;
                 points = [];
@@ -70,11 +52,11 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                 prePoint1 = null;
                 prePoint2 = null;
 
-                for (i = left; i <= right; i += defaultConfig.step) {
+                for (i = config.left; i <= config.right; i += config.step) {
                     res = calculateY(i, a, b, c, d, e, f);
                     if (res.length > 0) {
-                        if (res[0] < top && res[0] > bottom) {
-                            !prePointsIsVisible1 && prePoint1 != null && points1.push([i - defaultConfig.step, prePoint1]);
+                        if (res[0] < config.top && res[0] > config.bottom) {
+                            !prePointsIsVisible1 && prePoint1 != null && points1.push([i - config.step, prePoint1]);
                             points1.push([i, res[0]]);
                             prePointsIsVisible1 = true;
                         } else {
@@ -83,8 +65,8 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                             prePointsIsVisible1 = false;
                         }
                         if (res.length === 2) {
-                            if (res[1] < top && res[1] > bottom) {
-                                !prePointsIsVisible2 && prePoint2 != null && points2.push([i - defaultConfig.step, prePoint2]);
+                            if (res[1] < config.top && res[1] > config.bottom) {
+                                !prePointsIsVisible2 && prePoint2 != null && points2.push([i - config.step, prePoint2]);
                                 points2.push([i, res[1]]);
                                 prePointsIsVisible2 = true;
                             } else {
@@ -97,20 +79,19 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     } else {
                         if (prePointsIsExist) {
                             points = points.concat(points1.concat(points2.reverse()));
-                            points = connectSegments(left, right, bottom, top, points, [points1[0].slice()]);
+                            points = utils.concatSegments(points, [points1[0].slice()], config);
                             points1 = [];
                             points2 = [];
                         }
                         prePointsIsExist = false;
                     }
                 }
-                points1 = connectSegments(left, right, bottom, top, points2.reverse(), points1);
-                points = connectSegments(left, right, bottom, top, points, points1);
+                points1 = utils.concatSegments(points2.reverse(), points1, config);
+                points = utils.concatSegments(points, points1, config);
                 return points;
-            };
-            getSegments = function (coeff) {
-                var res = getArray(bottomBorderDrawing - 5 * defaultConfig.step, topBorderDrawing + 5 * defaultConfig.step,
-                    leftBorderDrawing - 5 * defaultConfig.step, rightBorderDrawing + 5 * defaultConfig.step,
+            }
+            function getSegments (coeff, config) {
+                var res = getArray(config,
                     coeff.B, coeff.A, coeff.C, coeff.E, coeff.D, coeff.F);
                 res.forEach(function (p) {
                     var k = p[0];
@@ -118,15 +99,14 @@ define(['mg-sheet/utils/common', './config'], function (utils, defaultConfig) {
                     p[1] = k;
                 });
                 if (res.length < 15) {
-                    res = getArray(leftBorderDrawing - 5 * defaultConfig.step, rightBorderDrawing + 5 * defaultConfig.step,
-                        bottomBorderDrawing - 5 * defaultConfig.step, topBorderDrawing + 5 * defaultConfig.step,
+                    res = getArray(config,
                         coeff.A, coeff.B, coeff.C, coeff.D, coeff.E, coeff.F);
                 }
                 return res;
-            };
+            }
 
             path = new paper.Path({
-                segments: getSegments(coefficients)
+                segments: getSegments(coefficients, config)
             });
             path.simplify();
 

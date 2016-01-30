@@ -172,8 +172,36 @@ define(['lodash'], function (_) {
         },
         absDiff: function (a, b) {
             return Math.abs(a - b);
+        },
+        concatSegments: function (s1, s2, config) {
+            var previousPoint;
+            if (s1.length != 0 && s2.length != 0) {
+                previousPoint = s1[s1.length - 1];
+                if (isPointTopOrRight(previousPoint, config)) {
+                    s1.push([config.right + config.width, config.top + config.height]);
+                    if (isPointBottomOrLeft(s2[0], config)) {
+                        s1.push([config.right + config.width, config.bottom - config.height]);
+                        s1.push([config.left - config.width, config.bottom - config.height]);
+                    }
+                } else if (isPointBottomOrLeft(previousPoint, config)) {
+                    s1.push([config.left - config.width, config.bottom - config.height]);
+                    if (isPointTopOrRight(s2[0], config)) {
+                        s1.push([config.left - config.width, config.top + config.height]);
+                        s1.push([config.right + config.width, config.top + config.height]);
+                    }
+                }
+            }
+            return s1.concat(s2);
         }
 
     };
+
+    function isPointTopOrRight(point, config) {
+        return point[0] >= config.right - 5 * config.step || point[1] >= config.top - 5 * config.step;
+    }
+    function isPointBottomOrLeft(point, config) {
+        return point[0] <= config.left - 5 * config.step || point[1] <= config.bottom - 5 * config.step;
+    }
+
     return utils;
 });
